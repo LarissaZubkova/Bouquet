@@ -6,6 +6,8 @@ import { modals, initModals } from "./modals/init-modals";
 
 // Ваши импорты...
 import MainPresenter from './presenter/main-presenter.js';
+import {AUTHORIZATION, END_POINT} from './consts.js';
+import CardsModel from './model/cards-model.js';
 
 // Код для работы попапов, не удаляйте его
 window.addEventListener("DOMContentLoaded", () => {
@@ -36,7 +38,9 @@ window.addEventListener("DOMContentLoaded", () => {
   const bodyElement = document.querySelector('body');
   const mainElement = bodyElement.querySelector('main');
 
-
+const cardsModel = new CardsModel({
+  cardsApiService: new CardsApiService(END_POINT, AUTHORIZATION),
+})
   const mainPresenter = new MainPresenter({
     mainContainer: mainElement,
     bodyElement: bodyElement,

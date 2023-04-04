@@ -1,10 +1,23 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import {MAX_DESCRIPTION_LENGTH, TYPES} from '../consts.js';
 
-function createCardTemplate() {
+function getPrice(price) {
+ return price.toLocaleString('ru');
+}
+
+function getDescription(description) {
+  if (description.length > MAX_DESCRIPTION_LENGTH) {
+    return `${description.slice(0, MAX_DESCRIPTION_LENGTH)}...`;
+  }
+  return description;
+}
+
+function createCardTemplate(card) {
+  const {type, previewImage, title, price, description} = card;
   return `<li class="catalogue__item">
       <div class="item-card">
         <button class="item-card__btn" type="button" data-open-modal="product-card" aria-label="посмотреть товар"></button>
-        <p class="item-card__label">имениннику</p>
+        <p class="item-card__label">${TYPES[type]}</p>
         <div class="item-card__img-wrap">
           <button class="button-heart item-card__to-fav-btn" type="button" aria-label="добавить в избранное">
             <svg class="button-heart__icon" width="75" height="75" aria-hidden="true" viewBox="0 0 75 75" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -14,20 +27,29 @@ function createCardTemplate() {
             </svg>
           </button>
           <picture>
-            <source type="image/webp" srcset="img/content/items/item-delicate-irises.webp, img/content/items/item-delicate-irises@2x.webp 2x"><img src="img/content/items/item-delicate-irises.png" srcset="img/content/items/item-delicate-irises@2x.png 2x" width="244" height="412" alt="item-delicate-irises">
+            <source type="image/webp" srcset="${previewImage} 2x">
+            <img src="${previewImage}" srcset="${previewImage} 2x" width="244" height="412" alt="item-delicate-irises">
           </picture>
         </div>
         <div class="item-card__desc-wrap">
-          <h3 class="title title--h4 item-card__title">Нежные Ирисы</h3>
-          <div class="item-card__price-wrap"><b class="item-card__formatted-price">1 500</b><span class="item-card__currency">р</span></div>
+          <h3 class="title title--h4 item-card__title">${title}</h3>
+          <div class="item-card__price-wrap"><b class="item-card__formatted-price">${getPrice(price)}</b><span class="item-card__currency">р</span></div>
         </div>
-        <p class="text text--size-20 item-card__desc">Минималистичный букет для коллег и&nbsp;близких с&nbsp;запахом весны.</p>
+        <p class="text text--size-20 item-card__desc">${getDescription(description)}</p>
       </div>
     </li>`;
 }
 
 export default class CardView extends AbstractView {
+  #card = null;
+
+  constructor({card}){
+    super();
+    this.#card = card;
+  }
+
   get template() {
-    return createCardTemplate();
+    console.log(this.#card)
+    return createCardTemplate(this.#card);
   }
 }

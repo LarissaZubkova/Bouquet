@@ -64,7 +64,14 @@ function createCardModalTemplate() {
 }
 
 export default class CardModalView extends AbstractView {
+  #card = null;
+
+  constructor({card}){
+    super();
+    this.#card = card;
+  }
+
   get template() {
-    return createCardModalTemplate();
+    return createCardModalTemplate(this.#card);
   }
 }

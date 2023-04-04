@@ -7,27 +7,35 @@ export default class CardPresenter {
     #bodyElement = null;
     #cardComponent = null;
     #cardModalComponent = null;
-    
+    #card = null;
+
     constructor({cardListContainer, bodyElement}) {
         this.#cardListContainer = cardListContainer;
         this.#bodyElement = bodyElement;
     }
 
-    init() {
-    const prevCardComponent = this.#cardComponent;
-    const prevCardModalComponent = this.#cardModalComponent;
+    init(card) {
+      this.#card = card;
 
-    this.#cardComponent = new CardView();
-    this.#cardModalComponent = new CardModalView();
+      const prevCardComponent = this.#cardComponent;
+      const prevCardModalComponent = this.#cardModalComponent;
 
-    if (prevCardComponent === null || prevCardModalComponent === null) {
+      this.#cardComponent = new CardView({
+        card: this.#card,
+      });
+      this.#cardModalComponent = new CardModalView({
+        card: this.#card,
+      });
+
+      if (prevCardComponent === null || prevCardModalComponent === null) {
         render(this.#cardComponent, this.#cardListContainer);
         return;
+      }
+
+      this.#bodyElement.appendChild(this.#cardModalComponent.element);
+      remove(prevCardComponent);
+      remove(prevCardModalComponent);
     }
 
-    remove(prevCardComponent);
-    remove(prevCardModalComponent);
-    }
 
-    
 }

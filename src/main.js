@@ -5,6 +5,7 @@ import { iosVhFix } from "./utils/ios-vh-fix";
 import { modals, initModals } from "./modals/init-modals";
 
 // Ваши импорты...
+import MainPresenter from './presenter/main-presenter.js';
 
 // Код для работы попапов, не удаляйте его
 window.addEventListener("DOMContentLoaded", () => {
@@ -32,4 +33,14 @@ window.addEventListener("DOMContentLoaded", () => {
   // ------------
 
   // Ваш код...
+  const bodyElement = document.querySelector('body');
+  const mainElement = bodyElement.querySelector('main');
+
+
+  const mainPresenter = new MainPresenter({
+    mainContainer: mainElement,
+    bodyElement: bodyElement,
+  })
+
+  mainPresenter.init();
 });

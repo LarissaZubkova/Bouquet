@@ -1,6 +1,6 @@
-# Проект «{{projectTitle}}»
+# Проект «Bouquet»
 
-* Студент: [{{userName}}]({{userProfile}}).
+* Студент: [Larisa Zubkova](https://htmlacademy.ru/profile/id2041971).
 
 ---
 

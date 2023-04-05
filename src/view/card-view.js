@@ -60,5 +60,6 @@ export default class CardView extends AbstractView {
     evt.preventDefault();
     this.#handleOpenBtnClick();
     document.querySelector('.modal').classList.add('product-card-active', 'is-active');
+    document.querySelector('body').classList.add('scroll-lock');
   }
 }

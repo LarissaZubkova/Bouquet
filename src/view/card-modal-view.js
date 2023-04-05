@@ -32,10 +32,13 @@ function createCardModalTemplate(product) {
 
 export default class CardModalView extends AbstractView {
   #product = null;
+  #handleModalClose = null;
 
-  constructor({product}){
+  constructor({product, onModalClose}){
     super();
     this.#product = product;
+    this.#handleModalClose = onModalClose;
+    document.querySelector('.modal-product__btn-close').addEventListener('click', this.#modalCloseHandler);
   }
 
   get template() {
@@ -44,5 +47,11 @@ export default class CardModalView extends AbstractView {
 
   setProduct(product) {
     this.#product = product;
+  }
+
+  #modalCloseHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleModalClose();
+    document.querySelector('body').classList.remove('scroll-lock');
   }
 }

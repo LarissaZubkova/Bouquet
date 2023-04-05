@@ -20,4 +20,18 @@ const TYPES = {
   motherday: 'маме',
 }
 
-export {AUTHORIZATION, END_POINT, CARD_COUNT_PER_STEP, UpdateType, MAX_DESCRIPTION_LENGTH, TYPES}
+
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  MODAL: 'MODAL',
+};
+
+export {
+  AUTHORIZATION,
+  END_POINT,
+  CARD_COUNT_PER_STEP,
+  UpdateType,
+  MAX_DESCRIPTION_LENGTH,
+  TYPES,
+  Mode,
+}

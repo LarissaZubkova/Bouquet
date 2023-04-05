@@ -14,6 +14,7 @@ function getSliderImages(images, authorPhoto) {
 }
 
 function createCardModalTemplate(product) {
+  if (product) {
   const {images, authorPhoto} = product;
   return `<div class="image-slider swiper modal-product__slider">
          <div class="image-slides-list swiper-wrapper">${getSliderImages(images, authorPhoto)}</div>
@@ -28,6 +29,7 @@ function createCardModalTemplate(product) {
            </svg>
          </button>
        </div>`;
+  }
 }
 
 export default class CardModalView extends AbstractView {

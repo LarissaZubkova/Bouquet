@@ -22,6 +22,7 @@ export default class MainPresenter {
     #sortComponent = null;
 
     #renderedCardCount = CARD_COUNT_PER_STEP;
+    #cardsPresenter = new Map();
     #isLoading = true;
     #catalogueElement = this.#catalogeComponent.element.querySelector('.container');
 
@@ -41,8 +42,11 @@ export default class MainPresenter {
         const cardPresenter = new CardPresenter({
             cardListContainer: this.#catalogueListComponent.element,
             modalProdactElement: this.#modalProdactElement,
+            onModeChange: this.#handleModeChange,
         })
+
         cardPresenter.init(card, this.#cardsModel);
+        this.#cardsPresenter.set(card.id, cardPresenter);
     }
 
     #renderCards(cards) {
@@ -64,8 +68,28 @@ export default class MainPresenter {
     }
     }
 
+    #handleModeChange = () => {
+      this.#cardsPresenter.forEach((presenter) => presenter.resetView());
+    }
+
+    #handleLoadMoreButtonClick = () => {
+      const cardCount = this.cards.length;
+
+      const newRenderedCardCount = Math.min(cardCount, this.#renderedCardCount + CARD_COUNT_PER_STEP);
+      const cards = this.cards.slice(this.#renderedCardCount, newRenderedCardCount);
+
+      this.#renderCards(cards);
+      this.#renderedCardCount = newRenderedCardCount;
+
+      if(this.#renderedCardCount >= cardCount) {
+        remove(this.#loadMoreButtonComponent);
+      }
+    }
+
     #renderLoadMoreButton() {
-      this.#loadMoreButtonComponent = new LoadMoreButtonView();
+      this.#loadMoreButtonComponent = new LoadMoreButtonView({
+        onClick: this.#handleLoadMoreButtonClick,
+      });
 
       render(this.#loadMoreButtonComponent, this.#catalogueElement);
     }

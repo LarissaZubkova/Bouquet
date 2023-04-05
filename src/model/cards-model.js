@@ -4,6 +4,7 @@ import { UpdateType } from '../consts.js';
 export default class CardsModel extends Observable {
   #cardsApiService = null;
   #cards = [];
+  #product = {};
 
   constructor({cardsApiService}) {
     super();
@@ -12,6 +13,15 @@ export default class CardsModel extends Observable {
 
   get cards() {
     return this.#cards;
+  }
+
+  async getProduct(productId) {
+    try {
+      this.#product = await this.#cardsApiService.getProduct(productId);
+    } catch(err) {
+      this.#product = {};
+    }
+    return this.#product;
   }
 
   async init() {

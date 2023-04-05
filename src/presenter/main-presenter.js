@@ -13,19 +13,21 @@ import {CARD_COUNT_PER_STEP, UpdateType} from '../consts.js';
 
 export default class MainPresenter {
     #mainContainer = null;
-    #bodyElement = null;
+    #modalProdactElement = null;
     #cardsModel = null;
 
     #catalogeComponent = new CatalogeView();
     #catalogueListComponent = new CatalogueListView();
     #loadMoreButtonComponent = null;
+    #sortComponent = null;
 
     #renderedCardCount = CARD_COUNT_PER_STEP;
     #isLoading = true;
+    #catalogueElement = this.#catalogeComponent.element.querySelector('.container');
 
-    constructor({mainContainer, bodyElement, cardsModel}) {
+    constructor({mainContainer, modalProdactElement, cardsModel}) {
         this.#mainContainer = mainContainer;
-        this.#bodyElement = bodyElement;
+        this.#modalProdactElement = modalProdactElement;
         this.#cardsModel = cardsModel;
 
         this.#cardsModel.addObserver(this.#handleModelEvent);
@@ -35,20 +37,21 @@ export default class MainPresenter {
       return this.#cardsModel.cards;
     }
 
-    init() {
-        this.#renderMainComponent();
-    }
-
     #renderCard(card) {
         const cardPresenter = new CardPresenter({
             cardListContainer: this.#catalogueListComponent.element,
-            bodyElement: this.#bodyElement,
+            modalProdactElement: this.#modalProdactElement,
         })
-        cardPresenter.init(card);
+        cardPresenter.init(card, this.#cardsModel);
     }
 
     #renderCards(cards) {
       cards.forEach((card) => this.#renderCard(card));
+    }
+
+    #renderSort() {
+      this.#sortComponent = new SortView();
+      render(this.#sortComponent, this.#catalogueElement, RenderPosition.AFTERBEGIN);
     }
 
     #handleModelEvent = async (updateType) => {
@@ -64,25 +67,23 @@ export default class MainPresenter {
     #renderLoadMoreButton() {
       this.#loadMoreButtonComponent = new LoadMoreButtonView();
 
-      render(this.#loadMoreButtonComponent, this.#catalogeComponent.element.querySelector('.container'));
+      render(this.#loadMoreButtonComponent, this.#catalogueElement);
     }
 
     #renderMainComponent() {
-        const catalogueElement = this.#catalogeComponent.element.querySelector('.container');
-
         render(new HeroView(), this.#mainContainer);
         render(new MissionView(), this.#mainContainer);
         render(new AdvantagesView(), this.#mainContainer);
         render(new FilterReasonView(), this.#mainContainer);
         render(new FilterColorView(), this.#mainContainer);
         render(this.#catalogeComponent, this.#mainContainer);
-        render(new SortView(), catalogueElement);
-        render(this.#catalogueListComponent, catalogueElement);
-        render(new LoadMoreButtonView, catalogueElement);
+        render(this.#catalogueListComponent, this.#catalogueElement);
 
+        console.log(this.#cardsModel)
         const cards = this.cards;
         const cardCount = cards.length;
 
+        this.#renderSort();
         this.#renderCards(cards.slice(0, Math.min(cardCount, this.#renderedCardCount)));
 
         if (cardCount > this.#renderedCardCount) {

@@ -42,14 +42,23 @@ function createCardTemplate(card) {
 
 export default class CardView extends AbstractView {
   #card = null;
+  #handleOpenBtnClick = null;
 
-  constructor({card}){
+  constructor({card, onOpenBtnClick}){
     super();
     this.#card = card;
+    this.#handleOpenBtnClick = onOpenBtnClick;
+
+    this.element.querySelector('.item-card__btn').addEventListener('click', this.#openBtnClickHandler);
   }
 
   get template() {
-    console.log(this.#card)
     return createCardTemplate(this.#card);
+  }
+
+  #openBtnClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleOpenBtnClick();
+    document.querySelector('.modal').classList.add('product-card-active', 'is-active');
   }
 }

@@ -6,4 +6,9 @@ export default class CardsApiService extends ApiService {
       return this._load({url: 'products'})
         .then(ApiService.parseResponse);
     }
+
+    async getProduct(productId) {
+      return this._load({url: `products/${productId}`})
+      .then(ApiService.parseResponse);
+    }
 }

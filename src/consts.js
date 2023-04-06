@@ -12,14 +12,32 @@ const UpdateType = {
 
 const MAX_DESCRIPTION_LENGTH = 140;
 
-const TYPES = {
-  birthdayboy: 'имениннику',
-  forlove: 'любимой',
-  bridge: 'невесте',
-  colleagues: 'коллеге',
-  motherday: 'маме',
+const ReasonType = {
+  ALL: 'для всех',
+  BIRTHDAYBOY: 'имениннику',
+  FORLOVE: 'любимой',
+  BRIDGE: 'невесте',
+  COLLEAGUES: 'коллеге',
+  MOTHERDAY: 'маме',
 }
 
+const ReasonName = {
+  ALL: 'all',
+  BIRTHDAYBOY: 'birthday',
+  FORLOVE: 'darling',
+  BRIDGE: 'bride',
+  COLLEAGUES: 'colleague',
+  MOTHERDAY: 'mother',
+}
+
+const ColorType = {
+  ALL: 'все цвета',
+  RED: 'красный',
+  WHITE: 'белый',
+  LILAC: 'сиреневый',
+  YELLOW: 'жёлтый',
+  PINK: 'розовый',
+}
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -32,6 +50,8 @@ export {
   CARD_COUNT_PER_STEP,
   UpdateType,
   MAX_DESCRIPTION_LENGTH,
-  TYPES,
+  ReasonType,
+  ColorType,
   Mode,
+  ReasonName,
 }

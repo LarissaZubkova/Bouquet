@@ -1,6 +1,21 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createFilterReasonTemplate() {
+function getFilterText(type) {
+  return type ? type[0].toUpperCase() + type.slice(1) : '';
+}
+
+function createFilterItemTemplate(filter, currentFilterType) {
+  const {type, name} = filter;
+  return `<div class="filter-reason__form-fields">
+          <div class="filter-field-text filter-reason__form-field--for-${name} filter-reason__form-field">
+            <input class="filter-field-text__input filter-reason__form-field--for-${name} filter-reason__form-field" type="radio" id="filter-reason-field-id-0" name="reason" value="for-${name}" ${type === currentFilterType ? 'checked' : ''}>
+            <label class="filter-field-text__label" for="filter-reason-field-id-0"><span class="filter-field-text__text">${getFilterText(type)}</span></label>
+          </div>`
+}
+
+function createFilterReasonTemplate(filterItems, currentFilterType) {
+  console.log(filterItems, currentFilterType)
+  const filterItemsTemplate = filterItems.map((filter) => createFilterItemTemplate(filter, currentFilterType)).join('');
   return `<section class="filter-reason">
       <div class="container">
         <h2 class="title title--h3 filter-reason__title">Выберите повод для букета</h2>
@@ -38,7 +53,28 @@ function createFilterReasonTemplate() {
 }
 
 export default class FilterReasonView extends AbstractView {
-  get template() {
-    return createFilterReasonTemplate();
+  #filters = null;
+  #currentFilter = null;
+  #handleFilterTypeChange = null;
+
+  constructor({filtersReason, currentFilterType, onFilterTypeChange}) {
+    super();
+    this.#filters = filtersReason;
+    this.#currentFilter = currentFilterType;
+    this.#handleFilterTypeChange = onFilterTypeChange;
+
+    this.element.addEventListener('click', this.#filterTypeChangeHandler);
   }
+
+  get template() {
+    return createFilterReasonTemplate(this.#filters, this.#currentFilter);
+  }
+
+  #filterTypeChangeHandler = (evt) => {
+    evt.preventDefault();
+
+    // if (evt.target.dataset.filterType) {
+    //   this.#handleFilterTypeChange(evt.target.dataset.filterType);
+    // }
+  };
 }

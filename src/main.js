@@ -1,14 +1,15 @@
 // Импорт вендоров и утилит, не удаляйте его
 import "./vendor";
-import { ImageSlider } from "./utils/image-slider";
-import { iosVhFix } from "./utils/ios-vh-fix";
-import { modals, initModals } from "./modals/init-modals";
+import {ImageSlider} from "./utils/image-slider";
+import {iosVhFix} from "./utils/ios-vh-fix";
+import {modals, initModals} from "./modals/init-modals";
 
 // Ваши импорты...
 import MainPresenter from './presenter/main-presenter.js';
 import CardsApiService from './api-service.js/cards-api-service';
 import {AUTHORIZATION, END_POINT} from './consts.js';
 import CardsModel from './model/cards-model.js';
+import FilterModel from './model/filter-model.js';
 
 // Код для работы попапов, не удаляйте его
 window.addEventListener("DOMContentLoaded", () => {
@@ -43,13 +44,14 @@ window.addEventListener("DOMContentLoaded", () => {
      cardsApiService: new CardsApiService(END_POINT, AUTHORIZATION),
   })
 
+  const filterModel = new FilterModel();
+
   const mainPresenter = new MainPresenter({
     mainContainer: mainElement,
     modalProdactElement: modalProdactElement,
     cardsModel,
+    filterModel,
   })
 
-
   cardsModel.init();
-  console.log(cardsModel)
 });

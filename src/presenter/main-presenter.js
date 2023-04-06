@@ -9,12 +9,14 @@ import SortView from '../view/sort-view.js';
 import CatalogueListView from '../view/catalogue-list-view.js';
 import LoadMoreButtonView from '../view/load-more-button-view.js';
 import CardPresenter from './card-presenter.js';
+import FiltersPresenter from './filters-presenter.js';
 import {CARD_COUNT_PER_STEP, UpdateType} from '../consts.js';
 
 export default class MainPresenter {
     #mainContainer = null;
     #modalProdactElement = null;
     #cardsModel = null;
+    #filterModel = null;
 
     #catalogeComponent = new CatalogeView();
     #catalogueListComponent = new CatalogueListView();
@@ -26,12 +28,14 @@ export default class MainPresenter {
     #isLoading = true;
     #catalogueElement = this.#catalogeComponent.element.querySelector('.container');
 
-    constructor({mainContainer, modalProdactElement, cardsModel}) {
+    constructor({mainContainer, modalProdactElement, cardsModel, filterModel}) {
         this.#mainContainer = mainContainer;
         this.#modalProdactElement = modalProdactElement;
         this.#cardsModel = cardsModel;
+        this.#filterModel = filterModel;
 
         this.#cardsModel.addObserver(this.#handleModelEvent);
+        this.#filterModel.addObserver(this.#handleModelEvent);
     }
 
     get cards() {
@@ -51,6 +55,16 @@ export default class MainPresenter {
 
     #renderCards(cards) {
       cards.forEach((card) => this.#renderCard(card));
+    }
+
+    #renderFilters() {
+      const filtersPresenter = new FiltersPresenter({
+        filterContainer: this.#mainContainer,
+        filterModel: this.#filterModel,
+        cardsModel: this.cards,
+      })
+
+      filtersPresenter.init();
     }
 
     #renderSort() {
@@ -98,8 +112,9 @@ export default class MainPresenter {
         render(new HeroView(), this.#mainContainer);
         render(new MissionView(), this.#mainContainer);
         render(new AdvantagesView(), this.#mainContainer);
-        render(new FilterReasonView(), this.#mainContainer);
-        render(new FilterColorView(), this.#mainContainer);
+        
+        this.#renderFilters();
+       
         render(this.#catalogeComponent, this.#mainContainer);
         render(this.#catalogueListComponent, this.#catalogueElement);
 

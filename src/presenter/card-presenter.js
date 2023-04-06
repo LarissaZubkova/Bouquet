@@ -2,7 +2,7 @@ import {render, remove, replace} from '../framework/render.js';
 import CardView from '../view/card-view.js';
 import CardModalView from '../view/card-modal-view.js';
 import ModalDescriptionView from '../view/modal-description-view.js';
-import { Mode } from '../consts.js';
+import {Mode} from '../consts.js';
 
 export default class CardPresenter {
     #cardListContainer = null;
@@ -62,6 +62,7 @@ export default class CardPresenter {
 
     resetView() {
       if (this.#mode !== Mode.DEFAULT) {
+        console.log(this.#mode)
         this.#replaceModalToCard();
       }
     }
@@ -79,11 +80,10 @@ export default class CardPresenter {
     }
 
     async #replaceModalToCard() {
-      console.log(this.#cardModalComponent, this.#modalDescriptionComponent)
-
+        if (this.#mode === Mode.MODAL) {
         remove(this.#cardModalComponent);
         remove(this.#modalDescriptionComponent);
-
+        }
         document.querySelector('.modal').classList.remove('product-card-active', 'is-active');
         document.removeEventListener('keydown', this.#escKeyDownHandler);
         this.#mode = Mode.DEFAULT;
@@ -101,13 +101,13 @@ export default class CardPresenter {
     }
 
     #handleModelClose = () => {
-      this.#handleDataChange(
-        UserAction.UPDATE_TASK,
-        UpdateType.MINOR,
-        {
-          film: update,
-        }
-      );
+      // this.#handleDataChange(
+      //   UserAction.UPDATE_TASK,
+      //   UpdateType.MINOR,
+      //   {
+      //     film: update,
+      //   }
+      // );
       this.#replaceModalToCard();
     }
 }

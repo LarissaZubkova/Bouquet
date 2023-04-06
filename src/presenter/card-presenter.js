@@ -11,15 +11,17 @@ export default class CardPresenter {
     #cardModalComponent = null;
     #modalDescriptionComponent = null;
     #handleModeChange = null;
+    #handleDataChange = null;
 
     #card = null;
     #cardModel = null;
     #mode = Mode.DEFAULT;
 
-    constructor({cardListContainer, modalProdactElement, onModeChange}) {
+    constructor({cardListContainer, modalProdactElement, onModeChange, onDataChange}) {
         this.#cardListContainer = cardListContainer;
         this.#modalProdactElement = modalProdactElement;
         this.#handleModeChange = onModeChange;
+        this.#handleDataChange = onDataChange;
     }
 
     init(card, cardModel) {
@@ -60,9 +62,12 @@ export default class CardPresenter {
       remove(prevCardModalComponent);
     }
 
+    destroy() {
+      remove(this.#cardComponent);
+    }
+
     resetView() {
       if (this.#mode !== Mode.DEFAULT) {
-        console.log(this.#mode)
         this.#replaceModalToCard();
       }
     }

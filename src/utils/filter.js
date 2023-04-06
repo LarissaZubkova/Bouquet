@@ -2,7 +2,10 @@ import {ReasonType, ColorType} from '../consts.js';
 
 const filterReason = {
   [ReasonType.ALL]: (cards) => cards,
-  [ReasonType.BIRTHDAYBOY]: (cards) => cards.filter((card) => card.type === ReasonType.BIRTHDAYBOY),
+  [ReasonType.BIRTHDAYBOY]: (cards) => cards.filter((card) => {
+    console.log(card, ReasonType.BIRTHDAYBOY)
+    return card.type === ReasonType.BIRTHDAYBOY
+  }),
   [ReasonType.FORLOVE]: (cards) => cards.filter((card) => card.type === ReasonType.FORLOVE),
   [ReasonType.BRIDGE]: (cards) => cards.filter((card) => card.type === ReasonType.BRIDGE),
   [ReasonType.COLLEAGUES]: (cards) => cards.filter((card) => card.type === ReasonType.COLLEAGUES),

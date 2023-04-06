@@ -13,7 +13,6 @@ function getDescription(description) {
 }
 
 function createCardTemplate(card) {
-  console.log(card);
   const {type, previewImage, title, price, description} = card;
   return `<li class="catalogue__item">
       <div class="item-card">

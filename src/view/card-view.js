@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {MAX_DESCRIPTION_LENGTH, ReasonType} from '../consts.js';
+import {MAX_DESCRIPTION_LENGTH, ReasonFilter} from '../consts.js';
 
 function getPrice(price) {
  return price.toLocaleString('ru');
@@ -12,12 +12,16 @@ function getDescription(description) {
   return description;
 }
 
+function getReasonTitle(type) {
+  return ReasonFilter[type.toUpperCase()].REASON_TYPE;
+} 
+
 function createCardTemplate(card) {
   const {type, previewImage, title, price, description} = card;
   return `<li class="catalogue__item">
       <div class="item-card">
         <button class="item-card__btn" type="button" data-open-modal="product-card" aria-label="посмотреть товар"></button>
-        <p class="item-card__label">${ReasonType[type.toUpperCase()]}</p>
+        <p class="item-card__label">${getReasonTitle(type)}</p>
         <div class="item-card__img-wrap">
           <button class="button-heart item-card__to-fav-btn" type="button" aria-label="добавить в избранное">
             <svg class="button-heart__icon" width="75" height="75" aria-hidden="true" viewBox="0 0 75 75" fill="none" xmlns="http://www.w3.org/2000/svg">

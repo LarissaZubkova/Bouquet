@@ -2,7 +2,7 @@ import {render, replace, remove} from '../framework/render.js';
 import FilterReasonView from '../view/filter-reason-view.js';
 import FilterColorView from '../view/filter-color-view.js';
 import {filterReason, filterColor} from '../utils/filter.js';
-import {ReasonType, ReasonName, ColorType, ColorName, UpdateType} from '../consts.js';
+import {ReasonFilter, ColorType, ColorName, UpdateType} from '../consts.js';
 
 export default class FiltersPresenter {
     #filterContainer = null;
@@ -22,38 +22,38 @@ export default class FiltersPresenter {
     }
 
     get filtersReason() {
-        const cards = this.#cardsModel.cards;
-        return [
-            {
-            type: ReasonType.ALL,
-            name: ReasonName.ALL,
-            count: filterReason[ReasonType.ALL](cards).length,
-            },
-            {
-            type: ReasonType.BIRTHDAYBOY,
-            name: ReasonName.BIRTHDAYBOY,
-            count: filterReason[ReasonType.BIRTHDAYBOY](cards).length,
-            },
-            {
-            type: ReasonType.FORLOVE,
-            name: ReasonName.FORLOVE,
-            count: filterReason[ReasonType.FORLOVE](cards).length,
-            },
-            {
-            type: ReasonType.BRIDGE,
-            name: ReasonName.BRIDGE,
-            count: filterReason[ReasonType.BRIDGE](cards).length,
-            },
-            {
-            type: ReasonType.COLLEAGUES,
-            name: ReasonName.COLLEAGUES,
-            count: filterReason[ReasonType.COLLEAGUES](cards).length,
-            },
-            {
-            type: ReasonType.MOTHERDAY,
-            name: ReasonName.MOTHERDAY,
-            count: filterReason[ReasonType.MOTHERDAY](cards).length,
-            },
+      const cards = this.#cardsModel.cards;
+      return [
+          {
+          type: ReasonFilter.ALL.REASON_TYPE,
+          name: ReasonFilter.ALL.REASUN_NAME,
+          count: filterReason[ReasonFilter.ALL.REASON_TYPE](cards).length,
+          },
+          {
+          type: ReasonFilter.BIRTHDAYBOY.REASON_TYPE,
+          name: ReasonFilter.BIRTHDAYBOY.REASUN_NAME,
+          count: filterReason[ReasonFilter.BIRTHDAYBOY.REASON_TYPE](cards).length,
+          },
+          {
+          type: ReasonFilter.FORLOVE.REASON_TYPE,
+          name: ReasonFilter.FORLOVE.REASUN_NAME,
+          count: filterReason[ReasonFilter.FORLOVE.REASON_TYPE](cards).length,
+          },
+          {
+          type: ReasonFilter.BRIDGE.REASON_TYPE,
+          name: ReasonFilter.BRIDGE.REASUN_NAME,
+          count: filterReason[ReasonFilter.BRIDGE.REASON_TYPE](cards).length,
+          },
+          {
+          type: ReasonFilter.COLLEAGUES.REASON_TYPE,
+          name: ReasonFilter.COLLEAGUES.REASUN_NAME,
+          count: filterReason[ReasonFilter.COLLEAGUES.REASON_TYPE](cards).length,
+          },
+          {
+          type: ReasonFilter.MOTHERDAY.REASON_TYPE,
+          name: ReasonFilter.MOTHERDAY.REASUN_NAME,
+          count: filterReason[ReasonFilter.MOTHERDAY.REASON_TYPE](cards).length,
+          },
         ]
     }
 
@@ -110,7 +110,6 @@ export default class FiltersPresenter {
           currentFilterType: this.#filterModel.filterColor,
           onFilterTypeChange: this.#handleFilterTypeChange,
       })
-
         if (prevFilterReasonComponent === null) {
             render(this.#filterReasonComponent, this.#filterContainer);
           } else {
@@ -126,12 +125,21 @@ export default class FiltersPresenter {
           }
       }
 
+    destroy() {
+      remove(this.#filterReasonComponent);
+      remove(this.#filterColorComponent);
+    }
+
     #handleModelEvent = () => {
       this.init();
     };
 
     #handleFilterTypeChange = (filterType) => {
         if (this.#filterModel.filterReason === filterType) {
+          return;
+        }
+
+        if (this.#filterModel.filterColor === filterType) {
           return;
         }
 

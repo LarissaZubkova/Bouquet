@@ -53,5 +53,6 @@ window.addEventListener("DOMContentLoaded", () => {
     filterModel,
   })
 
+  mainPresenter.init();
   cardsModel.init();
 });

@@ -1,15 +1,12 @@
-import {ReasonType, ColorType} from '../consts.js';
+import {ReasonFilter, ColorType} from '../consts.js';
 
 const filterReason = {
-  [ReasonType.ALL]: (cards) => cards,
-  [ReasonType.BIRTHDAYBOY]: (cards) => cards.filter((card) => {
-    console.log(card, ReasonType.BIRTHDAYBOY)
-    return card.type === ReasonType.BIRTHDAYBOY
-  }),
-  [ReasonType.FORLOVE]: (cards) => cards.filter((card) => card.type === ReasonType.FORLOVE),
-  [ReasonType.BRIDGE]: (cards) => cards.filter((card) => card.type === ReasonType.BRIDGE),
-  [ReasonType.COLLEAGUES]: (cards) => cards.filter((card) => card.type === ReasonType.COLLEAGUES),
-  [ReasonType.MOTHERDAY]: (cards) => cards.filter((card) => card.type === ReasonType.MOTHERDAY),
+  [ReasonFilter.ALL.REASON_TYPE]: (cards) => cards,
+  [ReasonFilter.BIRTHDAYBOY.REASON_TYPE]: (cards) => cards.filter((card) => card.type === ReasonFilter.BIRTHDAYBOY.FILTER_TYPE),
+  [ReasonFilter.FORLOVE.REASON_TYPE]: (cards) => cards.filter((card) => card.type === ReasonFilter.FORLOVE.FILTER_TYPE),
+  [ReasonFilter.BRIDGE.REASON_TYPE]: (cards) => cards.filter((card) => card.type === ReasonFilter.BRIDGE.FILTER_TYPE),
+  [ReasonFilter.COLLEAGUES.REASON_TYPE]: (cards) => cards.filter((card) => card.type === ReasonFilter.COLLEAGUES.FILTER_TYPE),
+  [ReasonFilter.MOTHERDAY.REASON_TYPE]: (cards) => cards.filter((card) => card.type === ReasonFilter.MOTHERDAY.FILTER_TYPE),
 };
 
 const filterColor = {

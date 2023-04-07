@@ -2,14 +2,16 @@ import {render, remove, RenderPosition} from '../framework/render.js';
 import HeroView from '../view/hero-view.js';
 import MissionView from '../view/mission-view.js';
 import AdvantagesView from '../view/advantages-view.js';
-import CatalogeView from '../view/catalogue-view.js';
+import CatalogueView from '../view/catalogue-view.js';
 import SortView from '../view/sort-view.js';
 import CatalogueListView from '../view/catalogue-list-view.js';
 import LoadMoreButtonView from '../view/load-more-button-view.js';
+import ErrorView from '../view/error-view.js';
 import CardPresenter from './card-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
-import {CARD_COUNT_PER_STEP, UpdateType, ReasonType, ColorType, UserAction, SortType} from '../consts.js';
+import {CARD_COUNT_PER_STEP, UpdateType, ReasonFilter, ColorType, UserAction, SortType} from '../consts.js';
 import {filterReason, filterColor} from '../utils/filter.js';
+import {sortIncrease, sortDescending} from '../utils/card.js';
 
 export default class MainPresenter {
     #mainContainer = null;
@@ -17,18 +19,22 @@ export default class MainPresenter {
     #cardsModel = null;
     #filterModel = null;
 
-    #catalogeComponent = new CatalogeView();
+    #catalogueComponent = new CatalogueView();
     #catalogueListComponent = new CatalogueListView();
+    #missionComponent = new MissionView();
+    #advantagesComponent = new AdvantagesView();
     #loadMoreButtonComponent = null;
     #sortComponent = null;
-
+    #errorMessageComponent = null;
+    
     #renderedCardCount = CARD_COUNT_PER_STEP;
     #cardsPresenter = new Map();
-    #filterReasonType = ReasonType.ALL;
+    #filtersPresenter = null;
+    #filterReasonType = ReasonFilter.ALL.REASON_TYPE;
     #filterColorType = ColorType.ALL;
     #currentSortType = SortType.INCREASE;
     #isLoading = true;
-    #catalogueElement = this.#catalogeComponent.element.querySelector('.container');
+    #catalogueElement = this.#catalogueComponent.element.querySelector('.container');
 
     constructor({mainContainer, modalProdactElement, cardsModel, filterModel}) {
         this.#mainContainer = mainContainer;
@@ -40,14 +46,29 @@ export default class MainPresenter {
         this.#filterModel.addObserver(this.#handleModelEvent);
     }
 
+    init() {
+      render(new HeroView(), this.#mainContainer);
+      render(this.#missionComponent, this.#mainContainer);
+      render(this.#advantagesComponent, this.#mainContainer);
+      this.#renderFilters();
+    }
+
     get cards() {
       const filterReasonType = this.#filterModel.filterReason;
-      console.log(filterReasonType)
       this.#filterColorType = this.#filterModel.filterColor;
       const cards = this.#cardsModel.cards;
-      const filteredCards = filterReason[filterReasonType](cards);
-      console.log(filteredCards)
-      return filteredCards;
+      const filteredReasonCards = filterReason[filterReasonType](cards);
+      const filteredColorCards = filterColor
+
+      switch (this.#currentSortType) {
+        case SortType.INCREASE:
+          return filteredReasonCards.sort(sortIncrease);
+        case SortType.DESCENDING:
+          return filteredReasonCards.sort(sortDescending);
+      }
+
+      console.log(filteredColorCards)
+      return filteredReasonCards;
     }
 
     #renderCard(card) {
@@ -67,17 +88,21 @@ export default class MainPresenter {
     }
 
     #renderFilters() {
-      const filtersPresenter = new FiltersPresenter({
+      this.#filtersPresenter = new FiltersPresenter({
         filterContainer: this.#mainContainer,
         filterModel: this.#filterModel,
         cardsModel: this.#cardsModel,
       })
 
-      filtersPresenter.init();
+      this.#filtersPresenter.init();
     }
 
     #renderSort() {
-      this.#sortComponent = new SortView();
+      this.#sortComponent = new SortView({
+        currentSortType: this.#currentSortType,
+        onSortTypeChange: this.#handleSortTypeChange
+      });
+
       render(this.#sortComponent, this.#catalogueElement, RenderPosition.AFTERBEGIN);
     }
 
@@ -87,12 +112,21 @@ export default class MainPresenter {
       this.#cardsPresenter.forEach((presenter) => presenter.destroy());
       this.#cardsPresenter.clear();
 
+      remove(this.#sortComponent);
       remove(this.#loadMoreButtonComponent);
+
+      if (this.#errorMessageComponent) {
+        remove(this.#errorMessageComponent);
+      }
 
       if (resetRenderedCardCount) {
         this.#renderedCardCount = CARD_COUNT_PER_STEP;
       } else {
         this.#renderedCardCount = Math.min(cardCount, this.#renderedCardCount);
+      }
+
+      if (resetSortType) {
+        this.#currentSortType = SortType.INCREASE;
       }
 
     }
@@ -115,7 +149,8 @@ export default class MainPresenter {
           this.#renderMainComponent();
           break;
         case UpdateType.MAJOR:
-          this.#clearMainComponent({resetRenderedCardCount:true, resetSortType: true})
+          this.#clearMainComponent({resetRenderedCardCount:true, resetSortType: true});
+          this.#renderMainComponent();
           break;
         case UpdateType.INIT:
         this.#isLoading = false;
@@ -135,6 +170,7 @@ export default class MainPresenter {
       }
 
       this.#currentSortType = sortType;
+      this.#renderedCardCount = CARD_COUNT_PER_STEP;
       this.#clearMainComponent({resetRenderedCardCount: true});
       this.#renderMainComponent();
     };
@@ -153,6 +189,15 @@ export default class MainPresenter {
       }
     }
 
+    #renderErrorMessage() {
+      remove(this.#missionComponent);
+      remove(this.#advantagesComponent);
+      this.#filtersPresenter.destroy();
+
+      this.#errorMessageComponent = new ErrorView();
+      render(this.#errorMessageComponent, this.#mainContainer);
+    }
+
     #renderLoadMoreButton() {
       this.#loadMoreButtonComponent = new LoadMoreButtonView({
         onClick: this.#handleLoadMoreButtonClick,
@@ -162,17 +207,16 @@ export default class MainPresenter {
     }
 
     #renderMainComponent() {
-        render(new HeroView(), this.#mainContainer);
-        render(new MissionView(), this.#mainContainer);
-        render(new AdvantagesView(), this.#mainContainer);
-
-        this.#renderFilters();
-
-        render(this.#catalogeComponent, this.#mainContainer);
-        render(this.#catalogueListComponent, this.#catalogueElement);
-
         const cards = this.cards;
         const cardCount = cards.length;
+
+        if (cardCount === 0) {
+          this.#renderErrorMessage();
+          return
+        }
+
+        render(this.#catalogueComponent, this.#mainContainer);
+        render(this.#catalogueListComponent, this.#catalogueElement);
 
         this.#renderSort();
         this.#renderCards(cards.slice(0, Math.min(cardCount, this.#renderedCardCount)));

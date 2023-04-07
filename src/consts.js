@@ -12,23 +12,54 @@ const UpdateType = {
 
 const MAX_DESCRIPTION_LENGTH = 140;
 
-const ReasonType = {
-  ALL: 'для всех',
-  BIRTHDAYBOY: 'имениннику',
-  FORLOVE: 'любимой',
-  BRIDGE: 'невесте',
-  COLLEAGUES: 'коллеге',
-  MOTHERDAY: 'маме',
+const ReasonFilter = {
+  ALL: {
+    REASON_TYPE: 'для всех',
+    REASUN_NAME: 'all',
+  },
+  BIRTHDAYBOY: {
+    REASON_TYPE: 'имениннику',
+    REASUN_NAME: 'birthday',
+    FILTER_TYPE: 'birthdayboy',
+  },
+  FORLOVE: {
+    REASON_TYPE: 'любимой',
+    REASUN_NAME: 'darling',
+    FILTER_TYPE: 'forlove',
+  },
+  BRIDGE: {
+    REASON_TYPE: 'невесте',
+    REASUN_NAME: 'bride',
+    FILTER_TYPE: 'bridge',
+  },
+  COLLEAGUES: {
+    REASON_TYPE: 'коллеге',
+    REASUN_NAME: 'colleague',
+    FILTER_TYPE: 'colleagues',
+  },
+  MOTHERDAY: {
+    REASON_TYPE: 'маме',
+    REASUN_NAME: 'mother',
+    FILTER_TYPE: 'motherday',
+  }
 }
+// const ReasonType = {
+//   ALL: 'для всех',
+//   BIRTHDAYBOY: 'имениннику',
+//   FORLOVE: 'любимой',
+//   BRIDGE: 'невесте',
+//   COLLEAGUES: 'коллеге',
+//   MOTHERDAY: 'маме',
+// }
 
-const ReasonName = {
-  ALL: 'all',
-  BIRTHDAYBOY: 'birthday',
-  FORLOVE: 'darling',
-  BRIDGE: 'bride',
-  COLLEAGUES: 'colleague',
-  MOTHERDAY: 'mother',
-}
+// const ReasonName = {
+//   ALL: 'all',
+//   BIRTHDAYBOY: 'birthday',
+//   FORLOVE: 'darling',
+//   BRIDGE: 'bride',
+//   COLLEAGUES: 'colleague',
+//   MOTHERDAY: 'mother',
+// }
 
 const ColorType = {
   ALL: 'все цвета',
@@ -80,10 +111,10 @@ export {
   CARD_COUNT_PER_STEP,
   UpdateType,
   MAX_DESCRIPTION_LENGTH,
-  ReasonType,
+  ReasonFilter,
   ColorType,
   Mode,
-  ReasonName,
+
   ColorName,
   ErrorMessage,
   UserAction,

@@ -10,7 +10,7 @@ function createHeroTemplate() {
         </div>
         <div class="hero__content">
           <h2 class="title title--h1">Букеты<br>для<br>самых близких</h2>
-          <a class="btn btn--with-icon btn--hero" href="#">выбрать
+          <a class="btn btn--with-icon btn--hero" href="#catalogue">выбрать
             <svg width="61" height="22" aria-hidden="true">
               <use xlink:href="#icon-arrow"></use>
             </svg>

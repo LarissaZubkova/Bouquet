@@ -1,4 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import {ScrollTop} from '../consts.js';
 
 function createLoadMoreBtnTemplate() {
   return `<div class="catalogue__btn-wrap">
@@ -19,7 +20,8 @@ export default class LoadMoreButtonView extends AbstractView {
     super();
     this.#handleClick = onClick;
 
-    this.element.addEventListener('click', this.#clickHandler);
+    this.element.querySelector('.catalogue__show-more-btn').addEventListener('click', this.#clickHandler);
+    this.element.querySelector('.catalogue__to-top-btn').addEventListener('click', this.#scrollBtnHandler);
   }
 
   get template() {
@@ -30,4 +32,8 @@ export default class LoadMoreButtonView extends AbstractView {
     evt.preventDefault();
     this.#handleClick();
   };
+
+  #scrollBtnHandler = () => {
+    window.scrollTo(ScrollTop.X, ScrollTop.Y);
+  }
 }

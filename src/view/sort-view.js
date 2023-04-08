@@ -2,8 +2,7 @@ import {SortType} from '../consts.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createSortTemplate(currentSortType) {
-  console.log(currentSortType)
-  return `<div class="catalogue__header">
+  return `<div class="catalogue__header" id="catalogue">
          <h2 class="title title--h3 catalogue__title">Каталог</h2>
          <div class="catalogue__sorting">
            <div class="sorting-price">

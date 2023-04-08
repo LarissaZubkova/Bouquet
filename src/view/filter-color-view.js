@@ -3,11 +3,14 @@ import AbstractView from '../framework/view/abstract-view.js';
 function createFilterItemTemplate(filter, currentFilterType, index) {
   const {type, name} = filter;
   return `<div class="filter-field-img filter-color__form-field">
-       <input class="filter-field-img__input filter-color__form-field" type="checkbox" id="filter-colors-field-id-${index}" name="colors" value="color-${name}" ${type === currentFilterType ? 'checked' : ''} data-filter-color="color-${name}">
-       <label class="filter-field-img__label" for="filter-colors-field-id-${index}"><span class="filter-field-img__img">
+       <input class="filter-field-img__input filter-color__form-field" type="checkbox" id="filter-colors-field-id-${index}" name="colors" value="color-${name}" ${name === currentFilterType ? 'checked' : ''} data-filter-color="color-${name}">
+       <label class="filter-field-img__label" for="filter-colors-field-id-${index}">
+       <span class="filter-field-img__img">
          <picture>
           <source type="image/webp" srcset="img/content/filter-${name}.webp, img/content/filter-${name}@2x.webp 2x"><img src="img/content/filter-${name}.png" srcset="img/content/filter-${name}@2x.png 2x" width="130" height="130" alt="${type}">
-         </picture></span><span class="filter-field-img__text">${type}</span></label>
+         </picture></span>
+         <span class="filter-field-img__text" data-filter-type="${name}">${type}</span>
+         </label>
        </div>`;
 }
 
@@ -19,7 +22,6 @@ function createFilterColorTemplate(filterItems, currentFilterType) {
     <form class="filter-color__form" action="#" method="post">
       <div class="filter-color__form-fields" data-filter-color="filter">
       ${filterItemsTemplate}
-
       </div>
       <button class="visually-hidden" type="submit" tabindex="-1">применить фильтр</button>
     </form>
@@ -48,8 +50,8 @@ export default class FilterColorView extends AbstractView {
   #filterTypeChangeHandler = (evt) => {
     evt.preventDefault();
 
-    // if (evt.target.dataset.filterType) {
-    //   this.#handleFilterTypeChange(evt.target.dataset.filterType);
-    // }
+    if (evt.target.dataset.filterType) {
+      this.#handleFilterTypeChange(evt.target.dataset.filterType);
+    }
   };
 }

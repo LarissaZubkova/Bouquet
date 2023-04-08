@@ -1,9 +1,9 @@
 import Observable from '../framework/observable.js';
-import {ReasonFilter, ColorType} from '../consts.js';
+import {ReasonFilter, ColorFilter} from '../consts.js';
 
 export default class FilterModel extends Observable {
   #filterReason = ReasonFilter.ALL.REASON_TYPE;
-  #filterColor = ColorType.ALL;
+  #filterColor = [ColorFilter.ALL.COLOR_NAME];
 
   get filterReason() {
     return this.#filterReason;
@@ -19,7 +19,23 @@ export default class FilterModel extends Observable {
   }
 
   setFilterColor(updateType, filterColor) {
-    this.#filterColor = filterColor;
+    if (this.#filterColor.includes(ColorFilter.ALL.COLOR_NAME)) {
+      this.#filterColor = this.#filterColor.filter((color) => color !== ColorFilter.ALL.COLOR_NAME);
+    }
+    if (this.#filterColor.includes(filterColor)) {
+      this.#filterColor = this.#filterColor.filter((color) => color !== filterColor);
+    } else {
+      this.#filterColor.push(filterColor);
+    }
+    this._notify(updateType, filterColor);
+  }
+
+  setFilterAllColor(updateType, filterColor) {
+    if (this.#filterColor.includes(ColorFilter.ALL.COLOR_NAME)) {
+      return;
+    }
+
+    this.#filterColor = [filterColor];
     this._notify(updateType, filterColor);
   }
 }

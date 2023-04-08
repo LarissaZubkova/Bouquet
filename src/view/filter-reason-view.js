@@ -47,7 +47,7 @@ export default class FilterReasonView extends AbstractView {
 
   #filterTypeChangeHandler = (evt) => {
     evt.preventDefault();
-    console.log(evt.target.dataset.filterType);
+
     if (evt.target.dataset.filterType) {
       this.#handleFilterTypeChange(evt.target.dataset.filterType);
     }

@@ -9,7 +9,7 @@ import LoadMoreButtonView from '../view/load-more-button-view.js';
 import ErrorView from '../view/error-view.js';
 import CardPresenter from './card-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
-import {CARD_COUNT_PER_STEP, UpdateType, ReasonFilter, ColorType, UserAction, SortType} from '../consts.js';
+import {CARD_COUNT_PER_STEP, UpdateType, ReasonFilter, ColorFilter, UserAction, SortType} from '../consts.js';
 import {filterReason, filterColor} from '../utils/filter.js';
 import {sortIncrease, sortDescending} from '../utils/card.js';
 
@@ -26,12 +26,12 @@ export default class MainPresenter {
     #loadMoreButtonComponent = null;
     #sortComponent = null;
     #errorMessageComponent = null;
-    
+
     #renderedCardCount = CARD_COUNT_PER_STEP;
     #cardsPresenter = new Map();
     #filtersPresenter = null;
     #filterReasonType = ReasonFilter.ALL.REASON_TYPE;
-    #filterColorType = ColorType.ALL;
+    #filterColorType = ColorFilter.ALL.COLOR_TYPE;
     #currentSortType = SortType.INCREASE;
     #isLoading = true;
     #catalogueElement = this.#catalogueComponent.element.querySelector('.container');
@@ -55,20 +55,21 @@ export default class MainPresenter {
 
     get cards() {
       const filterReasonType = this.#filterModel.filterReason;
-      this.#filterColorType = this.#filterModel.filterColor;
+      const filterColorType = this.#filterModel.filterColor;
       const cards = this.#cardsModel.cards;
+
       const filteredReasonCards = filterReason[filterReasonType](cards);
-      const filteredColorCards = filterColor
+      const filteredColorCards = filterColor(filterColorType, cards);
+      const filteredCards = filteredReasonCards.filter((card) => filteredColorCards.includes(card));
 
       switch (this.#currentSortType) {
         case SortType.INCREASE:
-          return filteredReasonCards.sort(sortIncrease);
+          return filteredCards.sort(sortIncrease);
         case SortType.DESCENDING:
-          return filteredReasonCards.sort(sortDescending);
+          return filteredCards.sort(sortDescending);
       }
 
-      console.log(filteredColorCards)
-      return filteredReasonCards;
+      return filteredCards;
     }
 
     #renderCard(card) {

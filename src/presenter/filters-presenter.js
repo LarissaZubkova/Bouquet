@@ -2,7 +2,7 @@ import {render, replace, remove} from '../framework/render.js';
 import FilterReasonView from '../view/filter-reason-view.js';
 import FilterColorView from '../view/filter-color-view.js';
 import {filterReason, filterColor} from '../utils/filter.js';
-import {ReasonFilter, ColorType, ColorName, UpdateType} from '../consts.js';
+import {ReasonFilter, ColorFilter, ColorName, UpdateType} from '../consts.js';
 
 export default class FiltersPresenter {
     #filterContainer = null;
@@ -61,34 +61,34 @@ export default class FiltersPresenter {
       const cards = this.#cardsModel.cards;
       return [
         {
-        type: ColorType.ALL,
-        name: ColorName.ALL,
-        count: filterColor[ColorType.ALL](cards).length,
+        type: ColorFilter.ALL.COLOR_TYPE,
+        name: ColorFilter.ALL.COLOR_NAME,
+       // count: filterColor[ColorType.ALL](cards).length,
         },
         {
-        type: ColorType.RED,
-        name: ColorName.RED,
-        count: filterColor[ColorType.RED](cards).length,
+        type: ColorFilter.RED.COLOR_TYPE,
+        name: ColorFilter.RED.COLOR_NAME,
+        //count: filterColor[ColorType.RED](cards).length,
         },
         {
-        type: ColorType.WHITE,
-        name: ColorName.WHITE,
-        count: filterColor[ColorType.WHITE](cards).length,
+        type: ColorFilter.WHITE.COLOR_TYPE,
+        name: ColorFilter.WHITE.COLOR_NAME,
+        //count: filterColor[ColorType.WHITE](cards).length,
         },
         {
-        type: ColorType.LILAC,
-        name: ColorName.LILAC,
-        count: filterColor[ColorType.LILAC](cards).length,
+        type: ColorFilter.LILAC.COLOR_TYPE,
+        name: ColorFilter.LILAC.COLOR_NAME,
+        //count: filterColor[ColorType.LILAC](cards).length,
         },
         {
-        type: ColorType.YELLOW,
-        name: ColorName.YELLOW,
-        count: filterColor[ColorType.YELLOW](cards).length,
+        type: ColorFilter.YELLOW.COLOR_TYPE,
+        name: ColorFilter.YELLOW.COLOR_NAME,
+        //count: filterColor[ColorType.YELLOW](cards).length,
         },
         {
-        type: ColorType.PINK,
-        name: ColorName.PINK,
-        count: filterColor[ColorType.PINK](cards).length,
+        type: ColorFilter.PINK.COLOR_TYPE,
+        name: ColorFilter.PINK.COLOR_NAME,
+        //count: filterColor[ColorType.PINK](cards).length,
         },
     ]
     }
@@ -102,14 +102,15 @@ export default class FiltersPresenter {
         this.#filterReasonComponent = new FilterReasonView({
             filtersReason,
             currentFilterType: this.#filterModel.filterReason,
-            onFilterTypeChange: this.#handleFilterTypeChange,
+            onFilterTypeChange: this.#handleFilterReasonTypeChange,
         })
 
         this.#filterColorComponent = new FilterColorView({
           filtersColor,
           currentFilterType: this.#filterModel.filterColor,
-          onFilterTypeChange: this.#handleFilterTypeChange,
-      })
+          onFilterTypeChange: this.#handleFilterColorTypeChange,
+        })
+
         if (prevFilterReasonComponent === null) {
             render(this.#filterReasonComponent, this.#filterContainer);
           } else {
@@ -134,15 +135,22 @@ export default class FiltersPresenter {
       this.init();
     };
 
-    #handleFilterTypeChange = (filterType) => {
+    #handleFilterReasonTypeChange = (filterType) => {
         if (this.#filterModel.filterReason === filterType) {
           return;
         }
 
-        if (this.#filterModel.filterColor === filterType) {
-          return;
-        }
-
         this.#filterModel.setFilterReason(UpdateType.MAJOR, filterType);
+      };
+
+      #handleFilterColorTypeChange = (filterType) => {
+        // if (this.#filterModel.filterColor === filterType) {
+        //   return;
+        // }
+        if (filterType === ColorFilter.ALL.COLOR_NAME) {
+          this.#filterModel.setFilterAllColor(UpdateType.MAJOR, filterType);
+        } else {
+          this.#filterModel.setFilterColor(UpdateType.MAJOR, filterType);
+        }
       };
 }

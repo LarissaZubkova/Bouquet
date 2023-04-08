@@ -1,4 +1,4 @@
-import {ReasonFilter, ColorType} from '../consts.js';
+import {ReasonFilter, ColorFilter} from '../consts.js';
 
 const filterReason = {
   [ReasonFilter.ALL.REASON_TYPE]: (cards) => cards,
@@ -9,13 +9,17 @@ const filterReason = {
   [ReasonFilter.MOTHERDAY.REASON_TYPE]: (cards) => cards.filter((card) => card.type === ReasonFilter.MOTHERDAY.FILTER_TYPE),
 };
 
-const filterColor = {
-  [ColorType.ALL]: (cards) => cards,
-  [ColorType.RED]: (cards) => cards.filter((card) => card.color === ColorType.RED),
-  [ColorType.WHITE]: (cards) => cards.filter((card) => card.color === ColorType.WHITE),
-  [ColorType.LILAC]: (cards) => cards.filter((card) => card.color === ColorType.LILAC),
-  [ColorType.YELLOW]: (cards) => cards.filter((card) => card.color === ColorType.YELLOW),
-  [ColorType.PINK]: (cards) => cards.filter((card) => card.color === ColorType.PINK),
+const filterByColor = {
+  [ColorFilter.ALL.COLOR_NAME]: (cards) =>  cards,
+  [ColorFilter.RED.COLOR_NAME]: (cards) => cards.filter((card) => card.color === ColorFilter.RED.FITER_TYPE),
+  [ColorFilter.WHITE.COLOR_NAME]: (cards) => cards.filter((card) => card.color === ColorFilter.WHITE.FITER_TYPE),
+  [ColorFilter.LILAC.COLOR_NAME]: (cards) => cards.filter((card) => card.color === ColorFilter.LILAC.FILTER_TYPE),
+  [ColorFilter.YELLOW.COLOR_NAME]: (cards) => cards.filter((card) => card.color === ColorFilter.YELLOW.FILTER_TYPE),
+  [ColorFilter.PINK.COLOR_NAME]: (cards) => cards.filter((card) => card.color === ColorFilter.PINK.FILTER_TYPE),
+}
+
+function filterColor(colors, cards){
+  return colors.map((color) => filterByColor[color](cards)).flat();
 }
 
 export {filterReason, filterColor};

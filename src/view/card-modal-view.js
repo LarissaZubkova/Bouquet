@@ -1,13 +1,16 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
+function getAuthor(index, authorPhoto) {
+  return (index === 0) ? `Автор  фотографии: ${authorPhoto}` : '';
+}
+
 function getSliderImages(images, authorPhoto) {
-  return images.map((image) => `
-      <div class="image-slides-list__item swiper-slide">
+  return images.map((image, index) => `<div class="image-slides-list__item swiper-slide">
         <div class="image-slide">
           <picture>
             <source type="image/webp" srcset="${image} 2x">
             <img src="${image}" srcset="${image} 2x" width="1274" height="1789" alt="">
-          </picture><span class="image-author image-slide__author">Автор  фотографии:  ${authorPhoto}</span>
+          </picture><span class="image-author image-slide__author"> ${getAuthor(index, authorPhoto)}</span>
         </div>
       </div>`
   ).join('');

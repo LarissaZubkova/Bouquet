@@ -43,40 +43,37 @@ const ReasonFilter = {
     FILTER_TYPE: 'motherday',
   }
 }
-// const ReasonType = {
-//   ALL: 'для всех',
-//   BIRTHDAYBOY: 'имениннику',
-//   FORLOVE: 'любимой',
-//   BRIDGE: 'невесте',
-//   COLLEAGUES: 'коллеге',
-//   MOTHERDAY: 'маме',
-// }
 
-// const ReasonName = {
-//   ALL: 'all',
-//   BIRTHDAYBOY: 'birthday',
-//   FORLOVE: 'darling',
-//   BRIDGE: 'bride',
-//   COLLEAGUES: 'colleague',
-//   MOTHERDAY: 'mother',
-// }
-
-const ColorType = {
-  ALL: 'все цвета',
-  RED: 'красный',
-  WHITE: 'белый',
-  LILAC: 'сиреневый',
-  YELLOW: 'жёлтый',
-  PINK: 'розовый',
-}
-
-const ColorName = {
-  ALL: 'all',
-  RED: 'red',
-  WHITE: 'white',
-  LILAC: 'lilac',
-  YELLOW: 'yellow',
-  PINK: 'pink',
+const ColorFilter = {
+  ALL: {
+    COLOR_TYPE: 'все цвета',
+    COLOR_NAME: 'all',
+  },
+  RED: {
+    COLOR_TYPE: 'красный',
+    COLOR_NAME: 'red',
+    FITER_TYPE: 'red',
+  },
+  WHITE: {
+    COLOR_TYPE: 'белый',
+    COLOR_NAME: 'white',
+    FITER_TYPE: 'white',
+  },
+  LILAC: {
+    COLOR_TYPE: 'сиреневый',
+    COLOR_NAME: 'lilac',
+    FILTER_TYPE: 'violet',
+  },
+  YELLOW: {
+    COLOR_TYPE: 'жёлтый',
+    COLOR_NAME: 'yellow',
+    FILTER_TYPE: 'yellow',
+  },
+  PINK: {
+    COLOR_TYPE: 'розовый',
+    COLOR_NAME: 'pink',
+    FILTER_TYPE: 'pink',
+  }
 }
 
 const Mode = {
@@ -105,6 +102,11 @@ const SortType = {
   DESCENDING: 'descending',
 };
 
+const ScrollTop = {
+  X: 0,
+  Y: 0,
+};
+
 export {
   AUTHORIZATION,
   END_POINT,
@@ -112,12 +114,11 @@ export {
   UpdateType,
   MAX_DESCRIPTION_LENGTH,
   ReasonFilter,
-  ColorType,
   Mode,
-
-  ColorName,
+  ColorFilter,
   ErrorMessage,
   UserAction,
   Method,
   SortType,
+  ScrollTop,
 }

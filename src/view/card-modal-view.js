@@ -18,8 +18,8 @@ function getSliderImages(images, authorPhoto) {
 
 function createCardModalTemplate(product) {
   if (product) {
-  const {images, authorPhoto} = product;
-  return `<div class="image-slider swiper modal-product__slider">
+    const {images, authorPhoto} = product;
+    return `<div class="image-slider swiper modal-product__slider">
          <div class="image-slides-list swiper-wrapper">${getSliderImages(images, authorPhoto)}</div>
          <button class="btn-round btn-round--to-left image-slider__button image-slider__button--prev" type="button">
            <svg width="80" height="85" aria-hidden="true" focusable="false">
@@ -37,17 +37,27 @@ function createCardModalTemplate(product) {
 
 export default class CardModalView extends AbstractView {
   #product = null;
+  #slider = null;
   #handleModalClose = null;
 
   constructor({product, onModalClose}){
     super();
     this.#product = product;
     this.#handleModalClose = onModalClose;
+
     document.querySelector('.modal-product__btn-close').addEventListener('click', this.#modalCloseHandler);
+    // if (document.querySelector('.image-slider__button--prev') || document.querySelector('.image-slider__button--next')) {
+    //   document.querySelector('.image-slider__button--prev').addEventListener('click', this.#sliderBtnHandler);
+    //   document.querySelector('.image-slider__button--next').addEventListener('click', this.#sliderBtnHandler);
+    // }
   }
 
   get template() {
     return createCardModalTemplate(this.#product);
+  }
+
+  setSlider(slider) {
+    this.#slider = slider;
   }
 
   setProduct(product) {
@@ -58,5 +68,15 @@ export default class CardModalView extends AbstractView {
     evt.preventDefault();
     this.#handleModalClose();
     document.querySelector('body').classList.remove('scroll-lock');
-  }
+  };
+
+  #sliderBtnHandler = (evt) => {
+    evt.preventDefault();
+    if (evt.target.classList.contains('image-slider__button--prev')) {
+      console.log(1);
+    }
+    if (evt.target.classList.contains('image-slider__button--next')) {
+      console.log(2);
+    }
+  };
 }

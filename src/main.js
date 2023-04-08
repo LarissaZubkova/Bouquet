@@ -1,8 +1,8 @@
 // Импорт вендоров и утилит, не удаляйте его
-import "./vendor";
-import {ImageSlider} from "./utils/image-slider";
-import {iosVhFix} from "./utils/ios-vh-fix";
-import {modals, initModals} from "./modals/init-modals";
+import './vendor';
+import {ImageSlider} from './utils/image-slider';
+import {iosVhFix} from './utils/ios-vh-fix';
+import {modals, initModals} from './modals/init-modals';
 
 // Ваши импорты...
 import MainPresenter from './presenter/main-presenter.js';
@@ -12,12 +12,12 @@ import CardsModel from './model/cards-model.js';
 import FilterModel from './model/filter-model.js';
 
 // Код для работы попапов, не удаляйте его
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener('DOMContentLoaded', () => {
   iosVhFix();
 
-  window.addEventListener("load", () => {
+  window.addEventListener('load', () => {
     // Инициализация слайдера
-    const imageSlider = new ImageSlider(".image-slider");
+    const imageSlider = new ImageSlider('.image-slider');
     imageSlider.init();
 
     // Инициализация попапов
@@ -26,8 +26,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Пример кода для открытия попапа
   document
-    .querySelector(".element-which-is-open-popup")
-    .addEventListener("click", () => modals.open("popup-data-attr"));
+    .querySelector('.element-which-is-open-popup')
+    .addEventListener('click', () => modals.open('popup-data-attr'));
 
   // Код отработает, если разметка попапа уже отрисована в index.html
 
@@ -41,8 +41,8 @@ window.addEventListener("DOMContentLoaded", () => {
   const modalProdactElement = document.querySelector('.modal-product');
 
   const cardsModel = new CardsModel({
-     cardsApiService: new CardsApiService(END_POINT, AUTHORIZATION),
-  })
+    cardsApiService: new CardsApiService(END_POINT, AUTHORIZATION),
+  });
 
   const filterModel = new FilterModel();
 
@@ -51,7 +51,7 @@ window.addEventListener("DOMContentLoaded", () => {
     modalProdactElement: modalProdactElement,
     cardsModel,
     filterModel,
-  })
+  });
 
   mainPresenter.init();
   cardsModel.init();

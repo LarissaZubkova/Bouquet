@@ -35,5 +35,5 @@ export default class LoadMoreButtonView extends AbstractView {
 
   #scrollBtnHandler = () => {
     window.scrollTo(ScrollTop.X, ScrollTop.Y);
-  }
+  };
 }

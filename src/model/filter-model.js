@@ -27,6 +27,10 @@ export default class FilterModel extends Observable {
     } else {
       this.#filterColor.push(filterColor);
     }
+    if (this.#filterColor.length === 0) {
+      this.#filterColor = [ColorFilter.ALL.COLOR_NAME];
+    }
+
     this._notify(updateType, filterColor);
   }
 

@@ -42,7 +42,7 @@ const ReasonFilter = {
     REASUN_NAME: 'mother',
     FILTER_TYPE: 'motherday',
   }
-}
+};
 
 const ColorFilter = {
   ALL: {
@@ -74,7 +74,7 @@ const ColorFilter = {
     COLOR_NAME: 'pink',
     FILTER_TYPE: 'pink',
   }
-}
+};
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -82,12 +82,12 @@ const Mode = {
 };
 
 const ErrorMessage = {
-  ADD_COMMENT: 'Can\'t add comment',
-  UPDATE_FILM: 'Can\'t update film',
+  ADD_CARD: 'Can\'t add card',
+  UPDATE_CARD: 'Can\'t update card',
 };
 
 const UserAction = {
-  UPDATE_CARD: 'UPDATE_Card',
+  ADD_CARD: 'ADD_CARD',
 };
 
 const Method = {
@@ -121,4 +121,4 @@ export {
   Method,
   SortType,
   ScrollTop,
-}
+};

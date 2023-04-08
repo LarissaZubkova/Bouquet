@@ -13,7 +13,21 @@ function createErrorTemplate() {
 }
 
 export default class ErrorView extends AbstractView {
+  #handleErrorBtnClick = null;
+
+  constructor({onErrorBtnClick}){
+    super();
+    this.#handleErrorBtnClick = onErrorBtnClick;
+
+    this.element.querySelector('.error-message__button').addEventListener('click', this.#errorBtnClickHandler);
+  }
+
   get template() {
     return createErrorTemplate();
   }
+
+  #errorBtnClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleErrorBtnClick();
+  };
 }

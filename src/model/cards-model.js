@@ -5,6 +5,7 @@ export default class CardsModel extends Observable {
   #cardsApiService = null;
   #cards = [];
   #product = {};
+  #cart = [];
 
   constructor({cardsApiService}) {
     super();
@@ -33,23 +34,28 @@ export default class CardsModel extends Observable {
     this._notify(UpdateType.INIT);
   }
 
-  async updateCard(updateType, update) {
-    const index = this.#cards.findIndex((card) => card.id === update.card.id);
+  async addCard(updateType, update) {
+    const index = this.#cards.findIndex((card) => card.id === update.id);
 
     if (index === -1) {
       throw new Error(ErrorMessage.UPDATE_CURD);
     }
 
     try {
-      const updatedCard = await this.#cardsApiService.updateCard(update.card);
-      this.#cards = [
-        ...this.#cards.slice(0, index),
-        update.card,
-        ...this.#cards.slice(index + 1),
-      ];
-      this._notify(updateType, updatedCard);
+      await this.#cardsApiService.addCard(update);
+
+      this._notify(updateType, update);
     } catch(err) {
-      throw new Error(ErrorMessage.UPDATE_CARD);
+      throw new Error(ErrorMessage.ADD_CARD);
     }
+  }
+
+  async getCart() {
+    try {
+      this.#cart = await this.#cardsApiService.cart;
+    } catch(err) {
+      this.#cart = [];
+    }
+    return this.#cart;
   }
 }

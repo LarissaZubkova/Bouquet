@@ -3,7 +3,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 function createFilterItemTemplate(filter, currentFilterType, index) {
   const {type, name} = filter;
   return `<div class="filter-field-img filter-color__form-field">
-       <input class="filter-field-img__input filter-color__form-field" type="checkbox" id="filter-colors-field-id-${index}" name="colors" value="color-${name}" ${name === currentFilterType ? 'checked' : ''} data-filter-color="color-${name}">
+       <input class="filter-field-img__input filter-color__form-field" type="checkbox" id="filter-colors-field-id-${index}" name="colors" value="color-${name}" ${currentFilterType.includes(name) ? 'checked' : ''} data-filter-color="color-${name}">
        <label class="filter-field-img__label" for="filter-colors-field-id-${index}">
        <span class="filter-field-img__img">
          <picture>

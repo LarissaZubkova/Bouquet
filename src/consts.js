@@ -83,7 +83,7 @@ const Mode = {
 
 const ErrorMessage = {
   ADD_CARD: 'Can\'t add card',
-  UPDATE_CARD: 'Can\'t update card',
+  DELETE_CARD: 'Can\'t delete card',
 };
 
 const UserAction = {

@@ -5,7 +5,7 @@ function getAuthor(index, authorPhoto) {
 }
 
 function getSliderImages(images, authorPhoto) {
-  return images.map((image, index) => `<div class="image-slides-list__item swiper-slide">
+  return images.map((image, index) => `<div class="image-slides-list__item swiper-slide" id="${index}">
         <div class="image-slide">
           <picture>
             <source type="image/webp" srcset="${image} 2x">
@@ -20,8 +20,8 @@ function createCardModalTemplate(product) {
   if (product) {
     const {images, authorPhoto} = product;
     return `<div class="image-slider swiper modal-product__slider">
-         <div class="image-slides-list swiper-wrapper">${getSliderImages(images, authorPhoto)}</div>
-         <button class="btn-round btn-round--to-left image-slider__button image-slider__button--prev" type="button">
+         <div class="image-slides-list swiper-wrapper" style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">${getSliderImages(images, authorPhoto)}</div>
+         <button class="btn-round btn-round--to-left image-slider__button image-slider__button--prev" type="button" disabled>
            <svg width="80" height="85" aria-hidden="true" focusable="false">
              <use xlink:href="#icon-round-button"></use>
            </svg>
@@ -37,7 +37,11 @@ function createCardModalTemplate(product) {
 
 export default class CardModalView extends AbstractView {
   #product = null;
-  #slider = null;
+  #btnLeft = null;
+  #btnRight = null;
+  #imageNamber = 1;
+  #positin = 0;
+  #sliderElement = null;
   #handleModalClose = null;
 
   constructor({product, onModalClose}){
@@ -45,15 +49,21 @@ export default class CardModalView extends AbstractView {
     this.#product = product;
     this.#handleModalClose = onModalClose;
 
+    this.#btnLeft = this.element.querySelector('.btn-round--to-left');
+    this.#btnRight = this.element.querySelector('.btn-round--to-right');
+    this.#sliderElement = this.element.querySelector('.image-slides-list');
     document.querySelector('.modal-product__btn-close').addEventListener('click', this.#modalCloseHandler);
+
+    if (this.#btnLeft) {
+      this.#btnLeft.addEventListener('click', this.#btnLeftClickHandler);
+    }
+    if (this.#btnRight) {
+      this.#btnRight.addEventListener('click', this.#btnRightClickHandler);
+    }
   }
 
   get template() {
     return createCardModalTemplate(this.#product);
-  }
-
-  setSlider(slider) {
-    this.#slider = slider;
   }
 
   setProduct(product) {
@@ -66,13 +76,33 @@ export default class CardModalView extends AbstractView {
     document.querySelector('body').classList.remove('scroll-lock');
   };
 
-  #sliderBtnHandler = (evt) => {
+  #btnLeftClickHandler = (evt) => {
     evt.preventDefault();
-    if (evt.target.classList.contains('image-slider__button--prev')) {
-      console.log(1);
+    console.log(this.#imageNamber);
+    this.#imageNamber -= 1;
+
+    if (this.#imageNamber >= 1) {
+      this.#btnRight.removeAttribute('disabled');
+      this.#sliderElement.style.transform = `translate3d(${this.#positin += 1030}px, 0px, 0px)`;
+      this.#sliderElement.style.transitionDuration = '700ms';
     }
-    if (evt.target.classList.contains('image-slider__button--next')) {
-      console.log(2);
+    if (this.#imageNamber === 1) {
+      this.#btnLeft.setAttribute('disabled', 'disabled');
+    }
+  };
+
+  #btnRightClickHandler = (evt) => {
+    evt.preventDefault();
+    console.log(this.#imageNamber);
+    this.#imageNamber += 1;
+
+    if (this.#imageNamber <= this.#product.images.length) {
+      this.#btnLeft.removeAttribute('disabled');
+      this.#sliderElement.style.transform = `translate3d(${this.#positin -= 1030}px, 0px, 0px)`;
+      this.#sliderElement.style.transitionDuration = '700ms';
+    }
+    if (this.#imageNamber === this.#product.images.length) {
+      this.#btnRight.setAttribute('disabled', 'disabled');
     }
   };
 }

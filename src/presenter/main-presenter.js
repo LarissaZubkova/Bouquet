@@ -197,6 +197,9 @@ export default class MainPresenter {
       case UserAction.ADD_CARD:
         this.#cardsModel.addCard(updateType, update);
         break;
+      case UserAction.DELETE_CARD:
+        this.#cardsModel.deleteCard(updateType, update);
+        break;
     }
   };
 

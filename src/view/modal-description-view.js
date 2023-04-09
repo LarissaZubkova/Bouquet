@@ -1,5 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {getPrice} from '../utils/card.js';
+import {UserAction} from '../consts.js';
 
 function getAddedCard(addedCards, id) {
   return addedCards.find((card) => card === id);
@@ -38,6 +39,13 @@ export default class ModalDescriptionView extends AbstractView {
 
   #clickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleBtnClick();
+    const addedCards = Object.keys(this.#cart.products);
+    const isCardEdded = addedCards.includes(this.#card.id);
+
+    if (!isCardEdded) {
+      this.#handleBtnClick(UserAction.ADD_CARD);
+    } else {
+      this.#handleBtnClick(UserAction.DELETE_CARD);
+    }
   };
 }

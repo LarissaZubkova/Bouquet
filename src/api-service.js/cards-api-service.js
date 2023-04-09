@@ -24,6 +24,15 @@ export default class CardsApiService extends ApiService {
     return parsedResponse;
   }
 
+  async deleteCard(card) {
+    const response = await this._load({
+      url: `products/${card.id}`,
+      method: Method.DELETE,
+    });
+
+    return response;
+  }
+
   get cart() {
     return this._load({url: 'cart'})
       .then(ApiService.parseResponse);

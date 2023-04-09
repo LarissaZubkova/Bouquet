@@ -50,6 +50,22 @@ export default class CardsModel extends Observable {
     }
   }
 
+  async deleteCard(updateType, update) {
+    const index = this.#cards.findIndex((card) => card.id === update.id);
+
+    if (index === -1) {
+      throw new Error(ErrorMessage.ADD_CARD);
+    }
+
+    try {
+      await this.#cardsApiService.deleteCard(update);
+
+      this._notify(updateType, update);
+    } catch(err) {
+      throw new Error(ErrorMessage.DELETE_CARD);
+    }
+  }
+
   async getCart() {
     try {
       this.#cart = await this.#cardsApiService.cart;

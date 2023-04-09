@@ -2,7 +2,7 @@ import {render, remove, replace} from '../framework/render.js';
 import CardView from '../view/card-view.js';
 import CardModalView from '../view/card-modal-view.js';
 import ModalDescriptionView from '../view/modal-description-view.js';
-import {Mode, UserAction, UpdateType} from '../consts.js';
+import {Mode, UpdateType} from '../consts.js';
 
 export default class CardPresenter {
   #cardListContainer = null;
@@ -28,9 +28,11 @@ export default class CardPresenter {
     this.#card = card;
     this.#cardsModel = cardsModel;
     const cart = await this.#cardsModel.getCart();
+    const product = await this.#cardsModel.getProduct(this.#card.id);
 
     const prevCardComponent = this.#cardComponent;
-    const prevCardModalComponent = this.#modalDescriptionComponent;
+    const prevCardModalComponent = this.#cardModalComponent;
+    const prevCardModalDescriptionComponent = this.#modalDescriptionComponent;
 
     this.#cardComponent = new CardView({
       card: this.#card,
@@ -40,7 +42,7 @@ export default class CardPresenter {
     });
 
     this.#cardModalComponent = new CardModalView({
-      product: this.#cardsModel.product,
+      product,
       onModalClose: this.#handleModelClose,
     });
 
@@ -50,7 +52,7 @@ export default class CardPresenter {
       onClick: this.#handleHeartClick,
     });
 
-    if (prevCardComponent === null || prevCardModalComponent === null) {
+    if (prevCardComponent === null || prevCardModalDescriptionComponent === null) {
       render(this.#cardComponent, this.#cardListContainer);
       return;
     }
@@ -60,20 +62,20 @@ export default class CardPresenter {
     }
 
     if (this.#mode === Mode.MODAL) {
-      replace(this.#modalDescriptionComponent, prevCardModalComponent);
+      replace(this.#cardModalComponent, prevCardModalComponent);
+      replace(this.#modalDescriptionComponent, prevCardModalDescriptionComponent);
       replace(this.#cardComponent, prevCardComponent);
     }
 
-    if (prevCardComponent) {
-      remove(prevCardComponent);
-    }
-    if (prevCardModalComponent) {
-      remove(prevCardModalComponent);
-    }
+    remove(prevCardComponent);
+    remove(prevCardModalComponent);
+    remove(prevCardModalDescriptionComponent);
   }
 
   destroy() {
     remove(this.#cardComponent);
+    remove(this.#cardModalComponent);
+    remove(this.#modalDescriptionComponent);
   }
 
   resetView() {
@@ -83,11 +85,9 @@ export default class CardPresenter {
   }
 
   async #replaceCardToModal() {
-    const product = await this.#cardsModel.getProduct(this.#card.id);
-    this.#cardModalComponent.setProduct(product);
-
     render(this.#cardModalComponent, this.#modalProdactElement);
     render(this.#modalDescriptionComponent, this.#modalProdactElement);
+
     document.addEventListener('keydown', this.#escKeyDownHandler);
 
     this.#handleModeChange();
@@ -99,6 +99,7 @@ export default class CardPresenter {
       remove(this.#cardModalComponent);
       remove(this.#modalDescriptionComponent);
     }
+
     document.querySelector('.modal').classList.remove('product-card-active', 'is-active');
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#mode = Mode.DEFAULT;
@@ -116,13 +117,6 @@ export default class CardPresenter {
   };
 
   #handleModelClose = () => {
-    // this.#handleDataChange(
-    //   UserAction.UPDATE_TASK,
-    //   UpdateType.MINOR,
-    //   {
-    //     film: update,
-    //   }
-    // );
     this.#replaceModalToCard();
   };
 

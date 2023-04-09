@@ -101,6 +101,7 @@ export default class MainPresenter {
 
   async #renderHeaderCount() {
     const cart = await this.#cardsModel.getCart();
+
     this.#headerCountComponent = new HeaderCountView({
       cart,
       onClick: this.#handelHeaderCountClick,

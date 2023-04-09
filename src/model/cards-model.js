@@ -22,6 +22,7 @@ export default class CardsModel extends Observable {
     } catch(err) {
       this.#product = {};
     }
+
     return this.#product;
   }
 
@@ -43,7 +44,6 @@ export default class CardsModel extends Observable {
 
     try {
       await this.#cardsApiService.addCard(update);
-
       this._notify(updateType, update);
     } catch(err) {
       throw new Error(ErrorMessage.ADD_CARD);
@@ -59,7 +59,6 @@ export default class CardsModel extends Observable {
 
     try {
       await this.#cardsApiService.deleteCard(update);
-
       this._notify(updateType, update);
     } catch(err) {
       throw new Error(ErrorMessage.DELETE_CARD);
@@ -72,6 +71,7 @@ export default class CardsModel extends Observable {
     } catch(err) {
       this.#cart = [];
     }
+
     return this.#cart;
   }
 }

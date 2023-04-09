@@ -78,7 +78,6 @@ export default class CardModalView extends AbstractView {
 
   #btnLeftClickHandler = (evt) => {
     evt.preventDefault();
-    console.log(this.#imageNamber);
     this.#imageNamber -= 1;
 
     if (this.#imageNamber >= 1) {
@@ -93,7 +92,6 @@ export default class CardModalView extends AbstractView {
 
   #btnRightClickHandler = (evt) => {
     evt.preventDefault();
-    console.log(this.#imageNamber);
     this.#imageNamber += 1;
 
     if (this.#imageNamber <= this.#product.images.length) {

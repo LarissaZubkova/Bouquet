@@ -38,7 +38,7 @@ export default class CardsModel extends Observable {
     const index = this.#cards.findIndex((card) => card.id === update.id);
 
     if (index === -1) {
-      throw new Error(ErrorMessage.UPDATE_CURD);
+      throw new Error(ErrorMessage.ADD_CARD);
     }
 
     try {

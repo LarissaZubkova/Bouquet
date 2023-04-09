@@ -39,6 +39,8 @@ window.addEventListener('DOMContentLoaded', () => {
   // Ваш код...
   const mainElement = document.querySelector('main');
   const modalProdactElement = document.querySelector('.modal-product');
+  const wrapperElement = document.querySelector('.wrapper');
+  const footerElement = document.querySelector('.footer');
 
   const cardsModel = new CardsModel({
     cardsApiService: new CardsApiService(END_POINT, AUTHORIZATION),
@@ -49,6 +51,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const mainPresenter = new MainPresenter({
     mainContainer: mainElement,
     modalProdactElement: modalProdactElement,
+    wrapperElement: wrapperElement,
+    footerElement: footerElement,
     cardsModel,
     filterModel,
   });

@@ -46,10 +46,6 @@ export default class CardModalView extends AbstractView {
     this.#handleModalClose = onModalClose;
 
     document.querySelector('.modal-product__btn-close').addEventListener('click', this.#modalCloseHandler);
-    // if (document.querySelector('.image-slider__button--prev') || document.querySelector('.image-slider__button--next')) {
-    //   document.querySelector('.image-slider__button--prev').addEventListener('click', this.#sliderBtnHandler);
-    //   document.querySelector('.image-slider__button--next').addEventListener('click', this.#sliderBtnHandler);
-    // }
   }
 
   get template() {

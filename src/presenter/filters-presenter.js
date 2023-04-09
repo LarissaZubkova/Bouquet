@@ -129,9 +129,6 @@ export default class FiltersPresenter {
   };
 
   #handleFilterColorTypeChange = (filterType) => {
-    // if (this.#filterModel.filterColor === filterType) {
-    //   return;
-    // }
     if (filterType === ColorFilter.ALL.COLOR_NAME) {
       this.#filterModel.setFilterAllColor(UpdateType.MAJOR, filterType);
     } else {

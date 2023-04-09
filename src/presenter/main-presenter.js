@@ -7,6 +7,7 @@ import CatalogueView from '../view/catalogue-view.js';
 import SortView from '../view/sort-view.js';
 import CatalogueListView from '../view/catalogue-list-view.js';
 import LoadMoreButtonView from '../view/load-more-button-view.js';
+import NotFoundView from '../view/not-found-view.js';
 import ErrorView from '../view/error-view.js';
 import CardPresenter from './card-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
@@ -18,13 +19,17 @@ import {sortIncrease, sortDescending} from '../utils/card.js';
 export default class MainPresenter {
   #mainContainer = null;
   #modalProdactElement = null;
+  #wrapperElement = null;
+  #footerElement = null;
   #cardsModel = null;
   #filterModel = null;
 
+  #heroComponent = new HeroView();
   #catalogueComponent = new CatalogueView();
   #catalogueListComponent = new CatalogueListView();
   #missionComponent = new MissionView();
   #advantagesComponent = new AdvantagesView();
+  #notFoundComponent = new NotFoundView();
   #headerCountComponent = null;
   #loadMoreButtonComponent = null;
   #sortComponent = null;
@@ -40,15 +45,13 @@ export default class MainPresenter {
   #catalogueElement = this.#catalogueComponent.element.querySelector('.container');
   #headerWrapperElement = document.querySelector('.header__wrapper');
 
-  constructor({mainContainer, modalProdactElement, cardsModel, filterModel}) {
+  constructor({mainContainer, modalProdactElement, wrapperElement, footerElement, cardsModel, filterModel}) {
     this.#mainContainer = mainContainer;
     this.#modalProdactElement = modalProdactElement;
+    this.#wrapperElement = wrapperElement;
+    this.#footerElement = footerElement;
     this.#cardsModel = cardsModel;
     this.#filterModel = filterModel;
-
-    this.#popupPresenter = new PopupPresenter({
-      mainContainer: this.#mainContainer,
-    });
 
     this.#cardsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -56,7 +59,7 @@ export default class MainPresenter {
 
   init() {
     this.#renderHeaderCount();
-    render(new HeroView(), this.#mainContainer);
+    render(this.#heroComponent, this.#mainContainer);
     render(this.#missionComponent, this.#mainContainer);
     render(this.#advantagesComponent, this.#mainContainer);
     this.#renderFilters();
@@ -96,12 +99,33 @@ export default class MainPresenter {
     cards.forEach((card) => this.#renderCard(card));
   }
 
-  #renderHeaderCount() {
+  async #renderHeaderCount() {
+    const cart = await this.#cardsModel.getCart();
     this.#headerCountComponent = new HeaderCountView({
+      cart,
       onClick: this.#handelHeaderCountClick,
     });
 
     render(this.#headerCountComponent, this.#headerWrapperElement);
+  }
+
+  #renderPopup() {
+    this.#mainContainer.style.display = 'none';
+    this.#filtersPresenter.destroy();
+
+    remove(this.#catalogueComponent);
+    remove(this.#catalogueListComponent);
+
+    this.#clearMainComponent();
+
+    this.#popupPresenter = new PopupPresenter({
+      wrapperElement: this.#wrapperElement,
+      footerElement: this.#footerElement,
+      onDestroy: this.#onPopupDestroy,
+      onDataChange: this.#handleViewAction,
+    });
+
+    this.#popupPresenter.init(this.#cardsModel);
   }
 
   #renderFilters() {
@@ -123,7 +147,14 @@ export default class MainPresenter {
     render(this.#sortComponent, this.#catalogueElement, RenderPosition.AFTERBEGIN);
   }
 
-  #clearMainComponent({resetRenderedCardCount = false, resetSortType = false} = {}()) {
+  #onPopupDestroy = () => {
+    this.#mainContainer.removeAttribute('style');
+    this.#renderFilters();
+
+    this.#renderMainComponent();
+  };
+
+  #clearMainComponent({resetRenderedCardCount = false, resetSortType = false} = {}) {
     const cardCount = this.cards.length;
 
     this.#cardsPresenter.forEach((presenter) => presenter.destroy());
@@ -136,6 +167,10 @@ export default class MainPresenter {
       remove(this.#errorMessageComponent);
     }
 
+    if (this.#notFoundComponent) {
+      remove(this.#notFoundComponent);
+    }
+
     if (resetRenderedCardCount) {
       this.#renderedCardCount = CARD_COUNT_PER_STEP;
     } else {
@@ -145,11 +180,10 @@ export default class MainPresenter {
     if (resetSortType) {
       this.#currentSortType = SortType.INCREASE;
     }
-
   }
 
   #handelHeaderCountClick = () => {
-    this.#popupPresenter.init(this.#cardsModel);
+    this.#renderPopup();
   };
 
   #handleErrorBtnClick = () => {
@@ -170,10 +204,13 @@ export default class MainPresenter {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#cardsPresenter.get(data.id).init(data, this.#cardsModel);
+        remove(this.#headerCountComponent);
+        this.#renderHeaderCount();
         break;
       case UpdateType.MINOR:
         this.#clearMainComponent();
         this.#renderMainComponent();
+        this.#renderPopup();
         break;
       case UpdateType.MAJOR:
         this.#clearMainComponent({resetRenderedCardCount:true, resetSortType: true});
@@ -240,15 +277,22 @@ export default class MainPresenter {
     const cards = this.cards;
     const cardCount = cards.length;
 
-    if (cardCount === 0) {
-      this.#renderErrorMessage();
-      return;
-    }
+    // if (cardCount === 0) {
+    //   this.#renderErrorMessage();
+    //   return;
+    // }
 
     render(this.#catalogueComponent, this.#mainContainer);
     render(this.#catalogueListComponent, this.#catalogueElement);
 
     this.#renderSort();
+
+    if(cardCount === 0) {
+      render(this.#notFoundComponent, this.#catalogueElement);
+      this.#renderLoadMoreButton();
+      return;
+    }
+
     this.#renderCards(cards.slice(0, Math.min(cardCount, this.#renderedCardCount)));
 
     if (cardCount > this.#renderedCardCount) {

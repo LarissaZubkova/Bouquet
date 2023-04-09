@@ -1,7 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {modals} from '../modals/init-modals';
+import {getPrice} from '../utils/card.js';
 
-function createHeaderCountTemplate() {
+function createHeaderCountTemplate(cart) {
+  const {productCount, sum} = cart;
   return `<div class="header__container">
   <div class="header-count">
     <button class="header-count__btn" type="button">
@@ -11,12 +12,12 @@ function createHeaderCountTemplate() {
       <span class="visually-hidden">закрыть</span>
     </button>
     <div class="header-count__count">
-      <p class="text text--size-20 header-count__counter">4</p>
+      <p class="text text--size-20 header-count__counter">${productCount}</p>
     </div>
     <div class="header-count__block">
       <p class="text text--size-20 header-count__text">сумма</p>
       <b class="price price--size-min header-count__price">
-        15 700
+        ${getPrice(sum)}
         <span>Р</span>
       </b>
     </div>
@@ -26,20 +27,22 @@ function createHeaderCountTemplate() {
 
 export default class HeaderCountView extends AbstractView {
   #handleClick = null;
+  #cart = null;
 
-  constructor() {
+  constructor({cart, onClick}) {
     super();
+    this.#cart = cart;
+    this.#handleClick = onClick;
 
-    this.element.querySelector('.header-count__btn').addEventListener('click', () => modals.open('popup-data-attr'));
     this.element.querySelector('.header-count__btn').addEventListener('click', this.#handleHeaderBtnClick);
   }
 
   get template() {
-    return createHeaderCountTemplate();
+    return createHeaderCountTemplate(this.#cart);
   }
 
   #handleHeaderBtnClick = (evt) => {
     evt.preventDefault();
-    document.querySelector('main').style.display = 'none';
+    this.#handleClick();
   };
 }

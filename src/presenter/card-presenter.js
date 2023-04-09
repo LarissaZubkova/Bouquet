@@ -14,7 +14,7 @@ export default class CardPresenter {
   #handleDataChange = null;
 
   #card = null;
-  #cardModel = null;
+  #cardsModel = null;
   #mode = Mode.DEFAULT;
 
   constructor({cardListContainer, modalProdactElement, onModeChange, onDataChange}) {
@@ -24,26 +24,29 @@ export default class CardPresenter {
     this.#handleDataChange = onDataChange;
   }
 
-  init(card, cardModel) {
+  async init(card, cardsModel) {
     this.#card = card;
-    this.#cardModel = cardModel;
+    this.#cardsModel = cardsModel;
+    const cart = await this.#cardsModel.getCart();
 
     const prevCardComponent = this.#cardComponent;
     const prevCardModalComponent = this.#modalDescriptionComponent;
 
     this.#cardComponent = new CardView({
       card: this.#card,
+      cart,
       onOpenBtnClick: this.#handleOpenBtnClick,
       onHeartClick: this.#handleHeartClick,
     });
 
     this.#cardModalComponent = new CardModalView({
-      product: this.#cardModel.product,
+      product: this.#cardsModel.product,
       onModalClose: this.#handleModelClose,
     });
 
     this.#modalDescriptionComponent = new ModalDescriptionView({
       card: this.#card,
+      cart,
       onClick: this.#handleHeartClick,
     });
 
@@ -80,7 +83,7 @@ export default class CardPresenter {
   }
 
   async #replaceCardToModal() {
-    const product = await this.#cardModel.getProduct(this.#card.id);
+    const product = await this.#cardsModel.getProduct(this.#card.id);
     this.#cardModalComponent.setProduct(product);
 
     render(this.#cardModalComponent, this.#modalProdactElement);
@@ -91,7 +94,7 @@ export default class CardPresenter {
     this.#mode = Mode.MODAL;
   }
 
-  async #replaceModalToCard() {
+  #replaceModalToCard() {
     if (this.#mode === Mode.MODAL) {
       remove(this.#cardModalComponent);
       remove(this.#modalDescriptionComponent);
@@ -123,9 +126,9 @@ export default class CardPresenter {
     this.#replaceModalToCard();
   };
 
-  #handleHeartClick = () => {
+  #handleHeartClick = (userAction) => {
     this.#handleDataChange(
-      UserAction.ADD_CARD,
+      userAction,
       UpdateType.PATCH,
       this.#card,
     );

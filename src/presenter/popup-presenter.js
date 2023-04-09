@@ -1,24 +1,68 @@
-//import {render, remove, replace} from '../framework/render.js';
+import {remove, replace} from '../framework/render.js';
 import PopupView from '../view/popup-view.js';
+import {UpdateType, UserAction} from '../consts.js';
 
 export default class PopupPresenter {
-  #mainContainer = null;
+  #wrapperElement = null;
+  #footerElement = null;
+  #handleDestroy = null;
+  #handleDataChange = null;
 
-  #cards = null;
+  #cardsModel = null;
   #popupComponent = null;
+  #cart = null;
 
-  constructor({mainContainer}) {
-    this.#mainContainer = mainContainer;
+  constructor({wrapperElement, footerElement, onDestroy, onDataChange}) {
+    this.#wrapperElement = wrapperElement;
+    this.#footerElement = footerElement;
+    this.#handleDestroy = onDestroy;
+    this.#handleDataChange = onDataChange;
   }
 
-  init(cards) {
-    this.#cards = cards;
-    if (this.#popupComponent !== 0) {
-      return;
+  async init(cardsModel) {
+    this.#cardsModel = cardsModel;
+    this.#cart = await cardsModel.getCart();
+
+    const prevPopupComponent = this.#popupComponent;
+
+    // if (this.#popupComponent !== null) {
+    //   return;
+    // }
+
+    this.#popupComponent = new PopupView({
+      cards: this.#cardsModel.cards,
+      cart: this.#cart,
+      onBtnCloseClick: this.#handleCancelClick,
+      onBtnPlusClick: this.#handleBtnPlusClick,
+    });
+
+    if (prevPopupComponent === null) {
+      this.#wrapperElement.insertBefore(this.#popupComponent.element, this.#footerElement);
+    } else {
+      replace(this.#popupComponent, prevPopupComponent);
+      remove(prevPopupComponent);
     }
-
-    this.#popupComponent = new PopupView();
   }
 
+  destroy() {
+    // if (this.#popupComponent === null) {
+    //   return;
+    // }
+    remove(this.#popupComponent);
+    this.#popupComponent = null;
+  }
 
+  #handleCancelClick = () => {
+    this.destroy();
+    this.#handleDestroy();
+  };
+
+  #handleBtnPlusClick = (card) => {
+    this.destroy();
+    this.#handleDataChange(
+      UserAction.ADD_CARD,
+      UpdateType.MINOR,
+      card,
+    );
+  };
 }

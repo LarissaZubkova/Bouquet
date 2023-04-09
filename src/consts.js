@@ -88,6 +88,7 @@ const ErrorMessage = {
 
 const UserAction = {
   ADD_CARD: 'ADD_CARD',
+  DELETE_CARD: 'DELETE_CARD',
 };
 
 const Method = {

@@ -29,7 +29,6 @@ export default class CardsApiService extends ApiService {
       url: `products/${card.id}`,
       method: Method.DELETE,
     });
-
     return response;
   }
 

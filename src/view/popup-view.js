@@ -1,3 +1,4 @@
+import {UserAction} from '../consts.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import {getPrice} from '../utils/card.js';
 
@@ -18,7 +19,7 @@ function createCardTemplate(cards, cart) {
       <p class="text text--size-40">${description}</p>
     </div>
     <div class="deferred-card__count">
-      <button class="btn-calculate" type="button">
+      <button class="btn-calculate btn-minus" type="button">
         <svg width="30" height="27" aria-hidden="true">
           <use xlink:href="#icon-minus"></use>
         </svg>
@@ -104,19 +105,22 @@ function createPopupTemplate(cards, cart) {
 
 export default class PopupView extends AbstractView {
   #handleBtnCloseClick = null;
-  #handleBtnPlusClick = null;
+  #handleBtnCalculateClick = null;
   #cards = null;
   #cart = null;
 
-  constructor({cards, cart, onBtnCloseClick, onBtnPlusClick}) {
+  constructor({cards, cart, onBtnCloseClick, onBtnCalculateClick}) {
     super();
     this.#cards = cards;
     this.#cart = cart;
     this.#handleBtnCloseClick = onBtnCloseClick;
-    this.#handleBtnPlusClick = onBtnPlusClick;
+    this.#handleBtnCalculateClick = onBtnCalculateClick;
 
     this.element.querySelector('.btn-close').addEventListener('click', this.#btnCloseClickHandler);
     this.element.querySelectorAll('.btn-plus').forEach((btn) => btn.addEventListener('click', this.#btnPlusClickHandler));
+    this.element.querySelectorAll('.btn-minus').forEach((btn) => btn.addEventListener('click', this.#btnMinusClickHandler));
+    this.element.querySelectorAll('.deferred-card__close-btn').forEach((btn) => btn.addEventListener('click', this.#btnMinusClickHandler));
+    this.element.querySelector('.popup-deferred__btn').addEventListener('click', this.#btnCatalogueClickHandler);
   }
 
   get template() {
@@ -128,10 +132,23 @@ export default class PopupView extends AbstractView {
     this.#handleBtnCloseClick();
   };
 
+  #btnCatalogueClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleBtnCloseClick();
+    window.scrollBy(0, 3450);
+  };
+
   #btnPlusClickHandler = (evt) => {
     evt.preventDefault();
     const cardId = evt.target.closest('.popup-deferred__item').id;
     const addedCard = this.#cards.find((card) => card.id === cardId);
-    this.#handleBtnPlusClick(addedCard);
+    this.#handleBtnCalculateClick(addedCard, UserAction.ADD_CARD);
+  };
+
+  #btnMinusClickHandler = (evt) => {
+    evt.preventDefault();
+    const cardId = evt.target.closest('.popup-deferred__item').id;
+    const deletedCard = this.#cards.find((card) => card.id === cardId);
+    this.#handleBtnCalculateClick(deletedCard, UserAction.DELETE_CARD);
   };
 }

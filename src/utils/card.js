@@ -25,7 +25,7 @@ function sortDescending(cardA, cardB) {
 }
 
 function getPrice(price) {
-  return price.toLocaleString('ru');
+  return price ? price.toLocaleString('ru') : 0;
 }
 
 export {sortIncrease, sortDescending, getPrice};

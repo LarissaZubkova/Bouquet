@@ -82,7 +82,7 @@ export default class CardModalView extends AbstractView {
 
     if (this.#imageNamber >= 1) {
       this.#btnRight.removeAttribute('disabled');
-      this.#sliderElement.style.transform = `translate3d(${this.#positin += 1030}px, 0px, 0px)`;
+      this.#sliderElement.style.transform = `translate3d(${this.#positin += 700}px, 0px, 0px)`;
       this.#sliderElement.style.transitionDuration = '700ms';
     }
     if (this.#imageNamber === 1) {
@@ -96,7 +96,7 @@ export default class CardModalView extends AbstractView {
 
     if (this.#imageNamber <= this.#product.images.length) {
       this.#btnLeft.removeAttribute('disabled');
-      this.#sliderElement.style.transform = `translate3d(${this.#positin -= 1030}px, 0px, 0px)`;
+      this.#sliderElement.style.transform = `translate3d(${this.#positin -= 700}px, 0px, 0px)`;
       this.#sliderElement.style.transitionDuration = '700ms';
     }
     if (this.#imageNamber === this.#product.images.length) {

@@ -18,8 +18,12 @@ function getAddedCard(addedCards, id) {
   return addedCards.find((card) => card === id);
 }
 
+function getProducts(products = {}) {
+  return Object.keys(products);
+}
+
 function createCardTemplate(card, cart) {
-  const addedCards = Object.keys(cart.products);
+  const addedCards = getProducts(cart.products);
   const {type, previewImage, title, price, description, id} = card;
   return `<li class="catalogue__item">
       <div class="item-card">
@@ -78,7 +82,7 @@ export default class CardView extends AbstractView {
 
   #heartClickHandler = (evt) => {
     evt.preventDefault();
-    const addedCards = Object.keys(this.#cart.products);
+    const addedCards = getProducts(this.#cart.products);
     const isCardEdded = addedCards.includes(this.#card.id);
 
     if (!isCardEdded) {

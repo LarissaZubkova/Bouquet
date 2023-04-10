@@ -105,6 +105,33 @@ export default class CardPresenter {
     this.#mode = Mode.DEFAULT;
   }
 
+  setAborting() {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#cardComponent.shake();
+      return;
+    }
+
+    this.#modalDescriptionComponent.shake();
+  }
+
+  // setDeleting() {
+  //   if (this.#mode === Mode.MODAL) {
+  //     this.#modalDescriptionComponent.updateElement({
+  //       isDisabled: true,
+  //       isDeleting: true,
+  //     });
+  //   }
+  // }
+
+  // setSaving() {
+  //   if (this.#mode === Mode.MODAL) {
+  //     this.#modalDescriptionComponent.updateElement({
+  //       isDisabled: true,
+  //       isSaving: true,
+  //     });
+  //   }
+  // }
+
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();

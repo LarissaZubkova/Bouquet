@@ -6,8 +6,12 @@ function getAddedCard(addedCards, id) {
   return addedCards.find((card) => card === id);
 }
 
+function getProducts(products = {}) {
+  return Object.keys(products);
+}
+
 function createModalDescriptionTemplate(card, cart) {
-  const addedCards = Object.keys(cart.products);
+  const addedCards = getProducts(cart.products);
   const {title, price, description, id} = card;
   return `<div class="product-description">
         <div class="product-description__header">
@@ -39,7 +43,7 @@ export default class ModalDescriptionView extends AbstractView {
 
   #clickHandler = (evt) => {
     evt.preventDefault();
-    const addedCards = Object.keys(this.#cart.products);
+    const addedCards = getProducts(this.#cart.products);
     const isCardEdded = addedCards.includes(this.#card.id);
 
     if (!isCardEdded) {

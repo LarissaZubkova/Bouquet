@@ -1,6 +1,6 @@
 import {remove, replace} from '../framework/render.js';
 import PopupView from '../view/popup-view.js';
-import {UpdateType, UserAction} from '../consts.js';
+import {UpdateType} from '../consts.js';
 
 export default class PopupPresenter {
   #wrapperElement = null;
@@ -25,15 +25,11 @@ export default class PopupPresenter {
 
     const prevPopupComponent = this.#popupComponent;
 
-    // if (this.#popupComponent !== null) {
-    //   return;
-    // }
-
     this.#popupComponent = new PopupView({
       cards: this.#cardsModel.cards,
       cart: this.#cart,
       onBtnCloseClick: this.#handleCancelClick,
-      onBtnPlusClick: this.#handleBtnPlusClick,
+      onBtnCalculateClick: this.#handleBtnCalculateClick,
     });
 
     if (prevPopupComponent === null) {
@@ -57,10 +53,10 @@ export default class PopupPresenter {
     this.#handleDestroy();
   };
 
-  #handleBtnPlusClick = (card) => {
+  #handleBtnCalculateClick = (card, userAction) => {
     this.destroy();
     this.#handleDataChange(
-      UserAction.ADD_CARD,
+      userAction,
       UpdateType.MINOR,
       card,
     );

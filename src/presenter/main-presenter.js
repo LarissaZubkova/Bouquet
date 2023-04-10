@@ -1,4 +1,5 @@
 import {render, remove, RenderPosition} from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import HeaderCountView from '../view/header-count.js';
 import HeroView from '../view/hero-view.js';
 import MissionView from '../view/mission-view.js';
@@ -12,7 +13,7 @@ import ErrorView from '../view/error-view.js';
 import CardPresenter from './card-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
 import PopupPresenter from './popup-presenter.js';
-import {CARD_COUNT_PER_STEP, UpdateType, UserAction, SortType} from '../consts.js';
+import {CARD_COUNT_PER_STEP, UpdateType, UserAction, SortType, TimeLimit} from '../consts.js';
 import {filterReason, filterColor} from '../utils/filter.js';
 import {sortIncrease, sortDescending} from '../utils/card.js';
 
@@ -39,10 +40,13 @@ export default class MainPresenter {
   #cardsPresenter = new Map();
   #filtersPresenter = null;
   #popupPresenter = null;
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
   #currentSortType = SortType.INCREASE;
-  #isLoading = true;
-  #catalogueElement = this.#catalogueComponent.element.querySelector('.container');
+  #catalogueElement = null;
   #headerWrapperElement = document.querySelector('.header__wrapper');
 
   constructor({mainContainer, modalProdactElement, wrapperElement, footerElement, cardsModel, filterModel}) {
@@ -96,7 +100,7 @@ export default class MainPresenter {
   }
 
   #renderCards(cards) {
-    cards.forEach((card) => this.#renderCard(card));
+    cards.forEach((card) =>this.#renderCard(card));
   }
 
   async #renderHeaderCount() {
@@ -151,7 +155,6 @@ export default class MainPresenter {
   #onPopupDestroy = () => {
     this.#mainContainer.removeAttribute('style');
     this.#renderFilters();
-
     this.#renderMainComponent();
   };
 
@@ -193,15 +196,27 @@ export default class MainPresenter {
     this.#renderMainComponent();
   };
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
     switch(actionType) {
       case UserAction.ADD_CARD:
-        this.#cardsModel.addCard(updateType, update);
+        //this.#cardsPresenter.get(update.id).setSaving();
+        try {
+          await this.#cardsModel.addCard(updateType, update);
+        } catch(err) {
+          this.#cardsPresenter.get(update.id).setAborting();
+        }
         break;
       case UserAction.DELETE_CARD:
-        this.#cardsModel.deleteCard(updateType, update);
+        //this.#cardsPresenter.get(update.id).setDeleting();
+        try {
+          await this.#cardsModel.deleteCard(updateType, update);
+        } catch(err) {
+          this.#cardsPresenter.get(update.id).setAborting();
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = async (updateType,data) => {
@@ -221,8 +236,6 @@ export default class MainPresenter {
         this.#renderMainComponent();
         break;
       case UpdateType.INIT:
-        this.#isLoading = false;
-        //remove(this.#loadingComponent);
         this.#renderMainComponent();
         break;
     }
@@ -280,15 +293,14 @@ export default class MainPresenter {
   #renderMainComponent() {
     const cards = this.cards;
     const cardCount = cards.length;
-
     // if (cardCount === 0) {
     //   this.#renderErrorMessage();
     //   return;
     // }
 
     render(this.#catalogueComponent, this.#mainContainer);
+    this.#catalogueElement = this.#catalogueComponent.element.querySelector('.container');
     render(this.#catalogueListComponent, this.#catalogueElement);
-
     this.#renderSort();
 
     if(cardCount === 0) {

@@ -38,7 +38,7 @@ export default class SortView extends AbstractView {
 
   #sortTypeChangeHandler = (evt) => {
     if (!evt.target.classList.contains('sorting-price__icon')) {
-         return;
+      return;
     }
 
     evt.preventDefault();

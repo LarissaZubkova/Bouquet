@@ -108,6 +108,11 @@ const ScrollTop = {
   Y: 0,
 };
 
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
+
 export {
   AUTHORIZATION,
   END_POINT,
@@ -122,4 +127,5 @@ export {
   Method,
   SortType,
   ScrollTop,
+  TimeLimit,
 };

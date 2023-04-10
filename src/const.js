@@ -15,31 +15,31 @@ const MAX_DESCRIPTION_LENGTH = 140;
 const ReasonFilter = {
   ALL: {
     REASON_TYPE: 'для всех',
-    REASUN_NAME: 'all',
+    REASON_NAME: 'all',
   },
   BIRTHDAYBOY: {
     REASON_TYPE: 'имениннику',
-    REASUN_NAME: 'birthday',
+    REASON_NAME: 'birthday',
     FILTER_TYPE: 'birthdayboy',
   },
   FORLOVE: {
     REASON_TYPE: 'любимой',
-    REASUN_NAME: 'darling',
+    REASON_NAME: 'darling',
     FILTER_TYPE: 'forlove',
   },
   BRIDGE: {
     REASON_TYPE: 'невесте',
-    REASUN_NAME: 'bride',
+    REASON_NAME: 'bride',
     FILTER_TYPE: 'bridge',
   },
   COLLEAGUES: {
     REASON_TYPE: 'коллеге',
-    REASUN_NAME: 'colleague',
+    REASON_NAME: 'colleague',
     FILTER_TYPE: 'colleagues',
   },
   MOTHERDAY: {
     REASON_TYPE: 'маме',
-    REASUN_NAME: 'mother',
+    REASON_NAME: 'mother',
     FILTER_TYPE: 'motherday',
   }
 };

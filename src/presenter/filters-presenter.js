@@ -1,7 +1,7 @@
 import {render, replace, remove} from '../framework/render.js';
 import FilterReasonView from '../view/filter-reason-view.js';
 import FilterColorView from '../view/filter-color-view.js';
-import {ReasonFilter, ColorFilter, UpdateType} from '../consts.js';
+import {ReasonFilter, ColorFilter, UpdateType} from '../const.js';
 
 export default class FiltersPresenter {
   #filterContainer = null;
@@ -24,27 +24,27 @@ export default class FiltersPresenter {
     return [
       {
         type: ReasonFilter.ALL.REASON_TYPE,
-        name: ReasonFilter.ALL.REASUN_NAME,
+        name: ReasonFilter.ALL.REASON_NAME,
       },
       {
         type: ReasonFilter.BIRTHDAYBOY.REASON_TYPE,
-        name: ReasonFilter.BIRTHDAYBOY.REASUN_NAME,
+        name: ReasonFilter.BIRTHDAYBOY.REASON_NAME,
       },
       {
         type: ReasonFilter.FORLOVE.REASON_TYPE,
-        name: ReasonFilter.FORLOVE.REASUN_NAME,
+        name: ReasonFilter.FORLOVE.REASON_NAME,
       },
       {
         type: ReasonFilter.BRIDGE.REASON_TYPE,
-        name: ReasonFilter.BRIDGE.REASUN_NAME,
+        name: ReasonFilter.BRIDGE.REASON_NAME,
       },
       {
         type: ReasonFilter.COLLEAGUES.REASON_TYPE,
-        name: ReasonFilter.COLLEAGUES.REASUN_NAME,
+        name: ReasonFilter.COLLEAGUES.REASON_NAME,
       },
       {
         type: ReasonFilter.MOTHERDAY.REASON_TYPE,
-        name: ReasonFilter.MOTHERDAY.REASUN_NAME,
+        name: ReasonFilter.MOTHERDAY.REASON_NAME,
       },
     ];
   }
@@ -114,6 +114,7 @@ export default class FiltersPresenter {
   destroy() {
     remove(this.#filterReasonComponent);
     remove(this.#filterColorComponent);
+    this.#filterModel.setFilters();
   }
 
   #handleModelEvent = () => {

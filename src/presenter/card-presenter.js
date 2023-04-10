@@ -2,7 +2,8 @@ import {render, remove, replace} from '../framework/render.js';
 import CardView from '../view/card-view.js';
 import CardModalView from '../view/card-modal-view.js';
 import ModalDescriptionView from '../view/modal-description-view.js';
-import {Mode, UpdateType} from '../consts.js';
+import {Mode, UpdateType} from '../const.js';
+import LoadingView from '../view/loading-view.js';
 
 export default class CardPresenter {
   #cardListContainer = null;
@@ -12,10 +13,13 @@ export default class CardPresenter {
   #modalDescriptionComponent = null;
   #handleModeChange = null;
   #handleDataChange = null;
+  #loadingComponent = new LoadingView();
 
   #card = null;
   #cardsModel = null;
   #mode = Mode.DEFAULT;
+  #isLoading = true;
+
 
   constructor({cardListContainer, modalProductElement, onModeChange, onDataChange}) {
     this.#cardListContainer = cardListContainer;
@@ -53,6 +57,9 @@ export default class CardPresenter {
     });
 
     if (prevCardComponent === null || prevCardModalDescriptionComponent === null) {
+      if (this.#isLoading) {
+        this.#renderLoading();
+      }
       render(this.#cardComponent, this.#cardListContainer);
       return;
     }
@@ -82,6 +89,15 @@ export default class CardPresenter {
     if (this.#mode !== Mode.DEFAULT) {
       this.#replaceModalToCard();
     }
+  }
+
+  #renderLoading() {
+    render(this.#loadingComponent, this.#cardListContainer);
+  }
+
+  removeLoading() {
+    console.log(1);
+    remove(this.#loadingComponent);
   }
 
   async #replaceCardToModal() {
@@ -156,3 +172,4 @@ export default class CardPresenter {
     );
   };
 }
+

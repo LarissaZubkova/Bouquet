@@ -1,4 +1,4 @@
-import {ReasonFilter, ColorFilter} from '../consts.js';
+import {ReasonFilter, ColorFilter} from '../const.js';
 
 const filterReason = {
   [ReasonFilter.ALL.REASON_TYPE]: (cards) => cards,

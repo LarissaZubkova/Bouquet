@@ -1,7 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {MAX_DESCRIPTION_LENGTH, ReasonFilter} from '../consts.js';
+import {MAX_DESCRIPTION_LENGTH, ReasonFilter} from '../const.js';
 import {getPrice} from '../utils/card.js';
-import {UserAction, ActionType} from '../consts.js';
+import {UserAction, ActionType} from '../const.js';
 
 function getDescription(description) {
   if (description.length > MAX_DESCRIPTION_LENGTH) {

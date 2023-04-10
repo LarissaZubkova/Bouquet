@@ -1,5 +1,5 @@
 import Observable from '../framework/observable.js';
-import {UpdateType, ErrorMessage} from '../consts.js';
+import {UpdateType, ErrorMessage} from '../const.js';
 
 export default class CardsModel extends Observable {
   #cardsApiService = null;

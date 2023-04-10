@@ -1,6 +1,6 @@
 import {remove, replace} from '../framework/render.js';
 import PopupView from '../view/popup-view.js';
-import {UpdateType} from '../consts.js';
+import {UpdateType} from '../const.js';
 
 export default class PopupPresenter {
   #wrapperElement = null;
@@ -41,9 +41,6 @@ export default class PopupPresenter {
   }
 
   destroy() {
-    // if (this.#popupComponent === null) {
-    //   return;
-    // }
     remove(this.#popupComponent);
     this.#popupComponent = null;
   }

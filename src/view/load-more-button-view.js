@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {ScrollTop} from '../consts.js';
+import {ScrollTop} from '../const.js';
 
 function createLoadMoreBtnTemplate() {
   return `<div class="catalogue__btn-wrap">

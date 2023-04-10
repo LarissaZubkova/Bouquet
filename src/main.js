@@ -7,7 +7,7 @@ import {modals, initModals} from './modals/init-modals';
 // Ваши импорты...
 import MainPresenter from './presenter/main-presenter.js';
 import CardsApiService from './api-service.js/cards-api-service';
-import {AUTHORIZATION, END_POINT} from './consts.js';
+import {AUTHORIZATION, END_POINT} from './const.js';
 import CardsModel from './model/cards-model.js';
 import FilterModel from './model/filter-model.js';
 

@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {getPrice} from '../utils/card.js';
-import {UserAction, ActionType} from '../consts.js';
+import {UserAction, ActionType} from '../const.js';
 
 function getAddedCard(addedCards, id) {
   return addedCards.find((card) => card === id);

@@ -1,4 +1,4 @@
-import {UserAction, ActionType} from '../consts.js';
+import {UserAction, ActionType} from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import {getPrice} from '../utils/card.js';
 
@@ -6,7 +6,7 @@ function createCardTemplate(cards, cart) {
   return cards.map((card) => {
     const {previewImage, title, description, price, id} = card;
     const count = cart.products[card.id];
-    const totalPrice = count * price;
+
     return `<li class="popup-deferred__item" id="${id}">
   <div class="deferred-card">
     <div class="deferred-card__img">
@@ -30,7 +30,7 @@ function createCardTemplate(cards, cart) {
         </svg>
       </button>
     </div>
-    <div class="deferred-card__price"><b class="price price--size-middle-p">${getPrice(totalPrice)}<span>Р</span></b>
+    <div class="deferred-card__price"><b class="price price--size-middle-p">${getPrice(count * price)}<span>Р</span></b>
     </div>
     <button class="btn-close deferred-card__close-btn" type="button">
       <svg width="55" height="56" aria-hidden="true">
@@ -131,11 +131,13 @@ export default class PopupView extends AbstractView {
   #btnCloseClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleBtnCloseClick();
+    document.querySelector('.header-count__btn').removeAttribute('disabled');
   };
 
   #btnCatalogueClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleBtnCloseClick();
+    document.querySelector('.header-count__btn').removeAttribute('disabled');
     window.scrollBy(0, 3450);
   };
 

@@ -12,7 +12,7 @@ function createHeaderCountTemplate(cart) {
       <span class="visually-hidden">закрыть</span>
     </button>
     <div class="header-count__count">
-      <p class="text text--size-20 header-count__counter">${productCount}</p>
+      <p class="text text--size-20 header-count__counter">${productCount ? productCount : 0}</p>
     </div>
     <div class="header-count__block">
       <p class="text text--size-20 header-count__text">сумма</p>
@@ -28,13 +28,15 @@ function createHeaderCountTemplate(cart) {
 export default class HeaderCountView extends AbstractView {
   #handleClick = null;
   #cart = null;
+  #headerBtn = null;
 
   constructor({cart, onClick}) {
     super();
     this.#cart = cart;
     this.#handleClick = onClick;
+    this.#headerBtn = this.element.querySelector('.header-count__btn');
 
-    this.element.querySelector('.header-count__btn').addEventListener('click', this.#handleHeaderBtnClick);
+    this.#headerBtn.addEventListener('click', this.#handleHeaderBtnClick);
   }
 
   get template() {
@@ -44,5 +46,6 @@ export default class HeaderCountView extends AbstractView {
   #handleHeaderBtnClick = (evt) => {
     evt.preventDefault();
     this.#handleClick();
+    this.#headerBtn.setAttribute('disabled', 'disabled');
   };
 }

@@ -1,5 +1,5 @@
 import ApiService from '../framework/api-service.js';
-import {Method, ActionType} from '../consts.js';
+import {Method, ActionType} from '../const.js';
 
 export default class CardsApiService extends ApiService {
   get cards() {

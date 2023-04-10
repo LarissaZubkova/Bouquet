@@ -13,7 +13,7 @@ import ErrorView from '../view/error-view.js';
 import CardPresenter from './card-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
 import PopupPresenter from './popup-presenter.js';
-import {CARD_COUNT_PER_STEP, UpdateType, UserAction, SortType, TimeLimit} from '../consts.js';
+import {CARD_COUNT_PER_STEP, UpdateType, UserAction, SortType, TimeLimit} from '../const.js';
 import {filterReason, filterColor} from '../utils/filter.js';
 import {sortIncrease, sortDescending} from '../utils/card.js';
 
@@ -40,6 +40,7 @@ export default class MainPresenter {
   #cardsPresenter = new Map();
   #filtersPresenter = null;
   #popupPresenter = null;
+  #isLoading = true;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
@@ -100,7 +101,7 @@ export default class MainPresenter {
   }
 
   #renderCards(cards) {
-    cards.forEach((card) =>this.#renderCard(card));
+    cards.forEach((card) => this.#renderCard(card));
   }
 
   async #renderHeaderCount() {
@@ -154,6 +155,8 @@ export default class MainPresenter {
 
   #onPopupDestroy = () => {
     this.#mainContainer.removeAttribute('style');
+    this.#filtersPresenter.destroy();
+    this.#clearMainComponent({resetRenderedCardCount:true, resetSortType: true});
     this.#renderFilters();
     this.#renderMainComponent();
   };
@@ -166,6 +169,7 @@ export default class MainPresenter {
 
     remove(this.#sortComponent);
     remove(this.#loadMoreButtonComponent);
+    this.#cardsPresenter.forEach((presenter) => presenter.removeLoading());
 
     if (this.#errorMessageComponent) {
       remove(this.#errorMessageComponent);
@@ -310,7 +314,10 @@ export default class MainPresenter {
       this.#renderLoadMoreButton();
       return;
     }
-
+    this.#isLoading = false;
+    this.#cardsPresenter.forEach((presenter) => {
+      console.log(presenter);
+      return presenter.removeLoading();});
     this.#renderCards(cards.slice(0, Math.min(cardCount, this.#renderedCardCount)));
 
     if (cardCount > this.#renderedCardCount) {

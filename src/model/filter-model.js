@@ -1,5 +1,5 @@
 import Observable from '../framework/observable.js';
-import {ReasonFilter, ColorFilter} from '../consts.js';
+import {ReasonFilter, ColorFilter} from '../const.js';
 
 export default class FilterModel extends Observable {
   #filterReason = ReasonFilter.ALL.REASON_TYPE;
@@ -11,6 +11,11 @@ export default class FilterModel extends Observable {
 
   get filterColor() {
     return this.#filterColor;
+  }
+
+  setFilters() {
+    this.#filterReason = ReasonFilter.ALL.REASON_TYPE;
+    this.#filterColor = [ColorFilter.ALL.COLOR_NAME];
   }
 
   setFilterReason(updateType, filterReason) {

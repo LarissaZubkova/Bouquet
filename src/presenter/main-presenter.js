@@ -212,7 +212,9 @@ export default class MainPresenter {
         try {
           await this.#cardsModel.deleteCard(updateType, update, type);
         } catch(err) {
-          this.#cardsPresenter.get(update.id).setAborting();
+          if (update.id) {
+            this.#cardsPresenter.get(update.id).setAborting();
+          }
         }
         break;
     }

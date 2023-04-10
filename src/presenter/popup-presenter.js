@@ -53,12 +53,12 @@ export default class PopupPresenter {
     this.#handleDestroy();
   };
 
-  #handleBtnCalculateClick = (card, userAction, type) => {
+  #handleBtnCalculateClick = (data, userAction, type) => {
     this.destroy();
     this.#handleDataChange(
       userAction,
       UpdateType.MINOR,
-      card,
+      data,
       type,
     );
   };

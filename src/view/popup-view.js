@@ -118,9 +118,10 @@ export default class PopupView extends AbstractView {
 
     this.element.querySelector('.btn-close').addEventListener('click', this.#btnCloseClickHandler);
     this.element.querySelectorAll('.btn-plus').forEach((btn) => btn.addEventListener('click', this.#btnPlusClickHandler));
-    this.element.querySelectorAll('.btn-minus').forEach((btn) => btn.addEventListener('click', this.#btnMinusClickHandler));
-    this.element.querySelectorAll('.deferred-card__close-btn').forEach((btn) => btn.addEventListener('click', this.#btnMinusClickHandler));
+    this.element.querySelectorAll('.btn-minus').forEach((btn) => btn.addEventListener('click', this.#btnDeleteClickHandler));
+    this.element.querySelectorAll('.deferred-card__close-btn').forEach((btn) => btn.addEventListener('click', this.#btnDeleteClickHandler));
     this.element.querySelector('.popup-deferred__btn').addEventListener('click', this.#btnCatalogueClickHandler);
+    this.element.querySelector('.popup-deferred__btn-clean').addEventListener('click', this.#btnDeleteClickHandler);
   }
 
   get template() {
@@ -145,14 +146,21 @@ export default class PopupView extends AbstractView {
     this.#handleBtnCalculateClick(addedCard, UserAction.ADD_CARD);
   };
 
-  #btnMinusClickHandler = (evt) => {
+  #btnDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    const cardId = evt.target.closest('.popup-deferred__item').id;
+    let cardId;
+    if (evt.target.closest('.popup-deferred__item')) {
+      cardId = evt.target.closest('.popup-deferred__item').id;
+    }
     const deletedCard = this.#cards.find((card) => card.id === cardId);
     if (evt.target.closest('.btn-calculate')) {
-      this.#handleBtnCalculateClick(deletedCard, UserAction.DELETE_CARD);
-    } else {
+      this.#handleBtnCalculateClick(deletedCard, UserAction.DELETE_CARD, ActionType.DELETE);
+    }
+    if (evt.target.closest('.btn-close')) {
       this.#handleBtnCalculateClick(deletedCard, UserAction.DELETE_CARD, ActionType.DELETE_ALL);
+    }
+    if (evt.target.closest('.popup-deferred__btn-clean')) {
+      this.#handleBtnCalculateClick(this.#cart, UserAction.DELETE_CARD, ActionType.CLEAN);
     }
   };
 }

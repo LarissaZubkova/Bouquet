@@ -51,11 +51,6 @@ export default class CardsModel extends Observable {
   }
 
   async deleteCard(updateType, update, type) {
-    const index = this.#cards.findIndex((card) => card.id === update.id);
-    if (index === -1) {
-      throw new Error(ErrorMessage.ADD_CARD);
-    }
-
     try {
       await this.#cardsApiService.deleteCard(update, type);
       this._notify(updateType, update);

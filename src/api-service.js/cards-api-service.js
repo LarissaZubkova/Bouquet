@@ -24,23 +24,35 @@ export default class CardsApiService extends ApiService {
     return parsedResponse;
   }
 
-  async deleteCard(card, type) {
+  async deleteCard(data, type) {
     let response;
-    if (type === ActionType.DELETE_ALL) {
-      const cart = await this.cart;
-      const count = cart.products[card.id];
-
-      for (let i = 0; i <= count; i++) {
+    const cart = await this.cart;
+    const count = cart.products[data.id];
+    const productId = Object.keys(cart.products);
+    switch(type) {
+      case ActionType.DELETE_ALL:
+        for (let i = 0; i <= count; i++) {
+          response = await this._load({
+            url: `products/${data.id}`,
+            method: Method.DELETE,
+          });
+        }
+        break;
+      case ActionType.DELETE:
         response = await this._load({
-          url: `products/${card.id}`,
+          url: `products/${data.id}`,
           method: Method.DELETE,
         });
-      }
-    } else {
-      response = await this._load({
-        url: `products/${card.id}`,
-        method: Method.DELETE,
-      });
+        break;
+      case ActionType.CLEAN:
+        productId.forEach( (id) => {
+          for (let i = 0; i < cart.products[id]; i++) {
+            response = this._load({
+              url: `products/${id}`,
+              method: Method.DELETE,
+            });
+          }
+        });
     }
     return response;
   }

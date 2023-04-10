@@ -92,8 +92,9 @@ const UserAction = {
 };
 
 const ActionType = {
-  DELETE: 'DELETE',
+  CLEAN: 'CLEAN',
   DELETE_ALL: 'DELETE_ALL',
+  DELETE: 'DELETE',
 };
 
 const Method = {

@@ -38,7 +38,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Ваш код...
   const mainElement = document.querySelector('main');
-  const modalProdactElement = document.querySelector('.modal-product');
+  const modalProductElement = document.querySelector('.modal-product');
   const wrapperElement = document.querySelector('.wrapper');
   const footerElement = document.querySelector('.footer');
 
@@ -50,7 +50,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const mainPresenter = new MainPresenter({
     mainContainer: mainElement,
-    modalProdactElement: modalProdactElement,
+    modalProductElement: modalProductElement,
     wrapperElement: wrapperElement,
     footerElement: footerElement,
     cardsModel,

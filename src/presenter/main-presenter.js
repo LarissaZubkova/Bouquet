@@ -19,7 +19,7 @@ import {sortIncrease, sortDescending} from '../utils/card.js';
 
 export default class MainPresenter {
   #mainContainer = null;
-  #modalProdactElement = null;
+  #modalProductElement = null;
   #wrapperElement = null;
   #footerElement = null;
   #cardsModel = null;
@@ -49,9 +49,9 @@ export default class MainPresenter {
   #catalogueElement = null;
   #headerWrapperElement = document.querySelector('.header__wrapper');
 
-  constructor({mainContainer, modalProdactElement, wrapperElement, footerElement, cardsModel, filterModel}) {
+  constructor({mainContainer, modalProductElement, wrapperElement, footerElement, cardsModel, filterModel}) {
     this.#mainContainer = mainContainer;
-    this.#modalProdactElement = modalProdactElement;
+    this.#modalProductElement = modalProductElement;
     this.#wrapperElement = wrapperElement;
     this.#footerElement = footerElement;
     this.#cardsModel = cardsModel;
@@ -90,7 +90,7 @@ export default class MainPresenter {
   #renderCard(card) {
     const cardPresenter = new CardPresenter({
       cardListContainer: this.#catalogueListComponent.element,
-      modalProdactElement: this.#modalProdactElement,
+      modalProductElement: this.#modalProductElement,
       onModeChange: this.#handleModeChange,
       onDataChange: this.#handleViewAction,
     });
@@ -196,7 +196,7 @@ export default class MainPresenter {
     this.#renderMainComponent();
   };
 
-  #handleViewAction = async (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update, type) => {
     this.#uiBlocker.block();
     switch(actionType) {
       case UserAction.ADD_CARD:
@@ -210,7 +210,7 @@ export default class MainPresenter {
       case UserAction.DELETE_CARD:
         //this.#cardsPresenter.get(update.id).setDeleting();
         try {
-          await this.#cardsModel.deleteCard(updateType, update);
+          await this.#cardsModel.deleteCard(updateType, update, type);
         } catch(err) {
           this.#cardsPresenter.get(update.id).setAborting();
         }
@@ -219,7 +219,7 @@ export default class MainPresenter {
     this.#uiBlocker.unblock();
   };
 
-  #handleModelEvent = async (updateType,data) => {
+  #handleModelEvent = async (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#cardsPresenter.get(data.id).init(data, this.#cardsModel);
@@ -227,9 +227,9 @@ export default class MainPresenter {
         this.#renderHeaderCount();
         break;
       case UpdateType.MINOR:
-        this.#clearMainComponent();
-        this.#renderMainComponent();
         this.#renderPopup();
+        remove(this.#headerCountComponent);
+        this.#renderHeaderCount();
         break;
       case UpdateType.MAJOR:
         this.#clearMainComponent({resetRenderedCardCount:true, resetSortType: true});

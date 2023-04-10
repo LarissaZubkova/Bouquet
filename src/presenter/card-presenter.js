@@ -6,7 +6,7 @@ import {Mode, UpdateType} from '../consts.js';
 
 export default class CardPresenter {
   #cardListContainer = null;
-  #modalProdactElement = null;
+  #modalProductElement = null;
   #cardComponent = null;
   #cardModalComponent = null;
   #modalDescriptionComponent = null;
@@ -17,9 +17,9 @@ export default class CardPresenter {
   #cardsModel = null;
   #mode = Mode.DEFAULT;
 
-  constructor({cardListContainer, modalProdactElement, onModeChange, onDataChange}) {
+  constructor({cardListContainer, modalProductElement, onModeChange, onDataChange}) {
     this.#cardListContainer = cardListContainer;
-    this.#modalProdactElement = modalProdactElement;
+    this.#modalProductElement = modalProductElement;
     this.#handleModeChange = onModeChange;
     this.#handleDataChange = onDataChange;
   }
@@ -85,8 +85,8 @@ export default class CardPresenter {
   }
 
   async #replaceCardToModal() {
-    render(this.#cardModalComponent, this.#modalProdactElement);
-    render(this.#modalDescriptionComponent, this.#modalProdactElement);
+    render(this.#cardModalComponent, this.#modalProductElement);
+    render(this.#modalDescriptionComponent, this.#modalProductElement);
 
     document.addEventListener('keydown', this.#escKeyDownHandler);
 
@@ -147,11 +147,12 @@ export default class CardPresenter {
     this.#replaceModalToCard();
   };
 
-  #handleHeartClick = (userAction) => {
+  #handleHeartClick = (userAction, type) => {
     this.#handleDataChange(
       userAction,
       UpdateType.PATCH,
       this.#card,
+      type,
     );
   };
 }

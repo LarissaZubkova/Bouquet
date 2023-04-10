@@ -91,6 +91,11 @@ const UserAction = {
   DELETE_CARD: 'DELETE_CARD',
 };
 
+const ActionType = {
+  DELETE: 'DELETE',
+  DELETE_ALL: 'DELETE_ALL',
+};
+
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
@@ -128,4 +133,5 @@ export {
   SortType,
   ScrollTop,
   TimeLimit,
+  ActionType,
 };

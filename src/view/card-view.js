@@ -1,7 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {MAX_DESCRIPTION_LENGTH, ReasonFilter} from '../consts.js';
 import {getPrice} from '../utils/card.js';
-import {UserAction} from '../consts.js';
+import {UserAction, ActionType} from '../consts.js';
 
 function getDescription(description) {
   if (description.length > MAX_DESCRIPTION_LENGTH) {
@@ -88,7 +88,7 @@ export default class CardView extends AbstractView {
     if (!isCardEdded) {
       this.#handleHeartClick(UserAction.ADD_CARD);
     } else {
-      this.#handleHeartClick(UserAction.DELETE_CARD);
+      this.#handleHeartClick(UserAction.DELETE_CARD, ActionType.DELETE_ALL);
     }
   };
 }

@@ -1,4 +1,4 @@
-import {UserAction} from '../consts.js';
+import {UserAction, ActionType} from '../consts.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import {getPrice} from '../utils/card.js';
 
@@ -149,6 +149,10 @@ export default class PopupView extends AbstractView {
     evt.preventDefault();
     const cardId = evt.target.closest('.popup-deferred__item').id;
     const deletedCard = this.#cards.find((card) => card.id === cardId);
-    this.#handleBtnCalculateClick(deletedCard, UserAction.DELETE_CARD);
+    if (evt.target.closest('.btn-calculate')) {
+      this.#handleBtnCalculateClick(deletedCard, UserAction.DELETE_CARD);
+    } else {
+      this.#handleBtnCalculateClick(deletedCard, UserAction.DELETE_CARD, ActionType.DELETE_ALL);
+    }
   };
 }

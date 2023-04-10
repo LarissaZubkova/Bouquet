@@ -1,5 +1,5 @@
 import ApiService from '../framework/api-service.js';
-import {Method} from '../consts.js';
+import {Method, ActionType} from '../consts.js';
 
 export default class CardsApiService extends ApiService {
   get cards() {
@@ -24,11 +24,24 @@ export default class CardsApiService extends ApiService {
     return parsedResponse;
   }
 
-  async deleteCard(card) {
-    const response = await this._load({
-      url: `products/${card.id}`,
-      method: Method.DELETE,
-    });
+  async deleteCard(card, type) {
+    let response;
+    if (type === ActionType.DELETE_ALL) {
+      const cart = await this.cart;
+      const count = cart.products[card.id];
+
+      for (let i = 0; i <= count; i++) {
+        response = await this._load({
+          url: `products/${card.id}`,
+          method: Method.DELETE,
+        });
+      }
+    } else {
+      response = await this._load({
+        url: `products/${card.id}`,
+        method: Method.DELETE,
+      });
+    }
     return response;
   }
 

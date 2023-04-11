@@ -25,6 +25,7 @@ function getProducts(products = {}) {
 function createCardTemplate(card, cart) {
   const addedCards = getProducts(cart.products);
   const {type, previewImage, title, price, description, id} = card;
+
   return `<li class="catalogue__item">
       <div class="item-card">
         <button class="item-card__btn" type="button" data-open-modal="product-card" aria-label="посмотреть товар"></button>
@@ -57,7 +58,7 @@ export default class CardView extends AbstractView {
   #handleOpenBtnClick = null;
   #handleHeartClick = null;
 
-  constructor({card, cart, onOpenBtnClick, onHeartClick}){
+  constructor({card, cart, onOpenBtnClick, onHeartClick}) {
     super();
     this.#card = card;
     this.#cart = cart;
@@ -66,7 +67,6 @@ export default class CardView extends AbstractView {
 
     this.element.querySelector('.item-card__btn').addEventListener('click', this.#openBtnClickHandler);
     this.element.querySelector('.button-heart').addEventListener('click', this.#heartClickHandler);
-
   }
 
   get template() {

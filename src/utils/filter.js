@@ -1,5 +1,9 @@
 import {ReasonFilter, ColorFilter} from '../const.js';
 
+function getFilterText(type) {
+  return type ? type[0].toUpperCase() + type.slice(1) : '';
+}
+
 const filterReason = {
   [ReasonFilter.ALL.REASON_TYPE]: (cards) => cards,
   [ReasonFilter.BIRTHDAYBOY.REASON_TYPE]: (cards) => cards.filter((card) => card.type === ReasonFilter.BIRTHDAYBOY.FILTER_TYPE),
@@ -22,4 +26,4 @@ function filterColor(colors, cards){
   return colors.map((color) => filterByColor[color](cards)).flat();
 }
 
-export {filterReason, filterColor};
+export {getFilterText ,filterReason, filterColor};

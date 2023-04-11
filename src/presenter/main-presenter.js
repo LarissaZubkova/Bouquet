@@ -9,7 +9,6 @@ import SortView from '../view/sort-view.js';
 import CatalogueListView from '../view/catalogue-list-view.js';
 import LoadMoreButtonView from '../view/load-more-button-view.js';
 import NotFoundView from '../view/not-found-view.js';
-import ErrorView from '../view/error-view.js';
 import CardPresenter from './card-presenter.js';
 import FiltersPresenter from './filters-presenter.js';
 import PopupPresenter from './popup-presenter.js';
@@ -24,7 +23,6 @@ export default class MainPresenter {
   #footerElement = null;
   #cardsModel = null;
   #filterModel = null;
-
   #heroComponent = new HeroView();
   #catalogueComponent = new CatalogueView();
   #catalogueListComponent = new CatalogueListView();
@@ -40,7 +38,6 @@ export default class MainPresenter {
   #cardsPresenter = new Map();
   #filtersPresenter = null;
   #popupPresenter = null;
-  #isLoading = true;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
@@ -95,7 +92,6 @@ export default class MainPresenter {
       onModeChange: this.#handleModeChange,
       onDataChange: this.#handleViewAction,
     });
-
     cardPresenter.init(card, this.#cardsModel);
     this.#cardsPresenter.set(card.id, cardPresenter);
   }
@@ -111,17 +107,14 @@ export default class MainPresenter {
       cart,
       onClick: this.#handelHeaderCountClick,
     });
-
     render(this.#headerCountComponent, this.#headerWrapperElement);
   }
 
   #renderPopup() {
     this.#mainContainer.style.display = 'none';
     this.#filtersPresenter.destroy();
-
     remove(this.#catalogueComponent);
     remove(this.#catalogueListComponent);
-
     this.#clearMainComponent();
 
     this.#popupPresenter = new PopupPresenter({
@@ -130,7 +123,6 @@ export default class MainPresenter {
       onDestroy: this.#onPopupDestroy,
       onDataChange: this.#handleViewAction,
     });
-
     this.#popupPresenter.init(this.#cardsModel);
   }
 
@@ -140,7 +132,6 @@ export default class MainPresenter {
       filterModel: this.#filterModel,
       cardsModel: this.#cardsModel,
     });
-
     this.#filtersPresenter.init();
   }
 
@@ -149,7 +140,6 @@ export default class MainPresenter {
       currentSortType: this.#currentSortType,
       onSortTypeChange: this.#handleSortTypeChange
     });
-
     render(this.#sortComponent, this.#catalogueElement, RenderPosition.AFTERBEGIN);
   }
 
@@ -166,10 +156,8 @@ export default class MainPresenter {
 
     this.#cardsPresenter.forEach((presenter) => presenter.destroy());
     this.#cardsPresenter.clear();
-
     remove(this.#sortComponent);
     remove(this.#loadMoreButtonComponent);
-    this.#cardsPresenter.forEach((presenter) => presenter.removeLoading());
 
     if (this.#errorMessageComponent) {
       remove(this.#errorMessageComponent);
@@ -194,17 +182,10 @@ export default class MainPresenter {
     this.#renderPopup();
   };
 
-  #handleErrorBtnClick = () => {
-    //remove(this.#errorMessageComponent)
-    this.#clearMainComponent({resetRenderedCardCount:true, resetSortType: true});
-    this.#renderMainComponent();
-  };
-
   #handleViewAction = async (actionType, updateType, update, type) => {
     this.#uiBlocker.block();
     switch(actionType) {
       case UserAction.ADD_CARD:
-        //this.#cardsPresenter.get(update.id).setSaving();
         try {
           await this.#cardsModel.addCard(updateType, update);
         } catch(err) {
@@ -212,7 +193,6 @@ export default class MainPresenter {
         }
         break;
       case UserAction.DELETE_CARD:
-        //this.#cardsPresenter.get(update.id).setDeleting();
         try {
           await this.#cardsModel.deleteCard(updateType, update, type);
         } catch(err) {
@@ -264,7 +244,6 @@ export default class MainPresenter {
 
   #handleLoadMoreButtonClick = () => {
     const cardCount = this.cards.length;
-
     const newRenderedCardCount = Math.min(cardCount, this.#renderedCardCount + CARD_COUNT_PER_STEP);
     const cards = this.cards.slice(this.#renderedCardCount, newRenderedCardCount);
 
@@ -276,33 +255,16 @@ export default class MainPresenter {
     }
   };
 
-  #renderErrorMessage() {
-    remove(this.#missionComponent);
-    remove(this.#advantagesComponent);
-    this.#filtersPresenter.destroy();
-
-    this.#errorMessageComponent = new ErrorView({
-      onErrorBtnClick: this.#handleErrorBtnClick,
-    });
-
-    render(this.#errorMessageComponent, this.#mainContainer);
-  }
-
   #renderLoadMoreButton() {
     this.#loadMoreButtonComponent = new LoadMoreButtonView({
       onClick: this.#handleLoadMoreButtonClick,
     });
-
     render(this.#loadMoreButtonComponent, this.#catalogueElement);
   }
 
   #renderMainComponent() {
     const cards = this.cards;
     const cardCount = cards.length;
-    // if (cardCount === 0) {
-    //   this.#renderErrorMessage();
-    //   return;
-    // }
 
     render(this.#catalogueComponent, this.#mainContainer);
     this.#catalogueElement = this.#catalogueComponent.element.querySelector('.container');
@@ -314,10 +276,7 @@ export default class MainPresenter {
       this.#renderLoadMoreButton();
       return;
     }
-    this.#isLoading = false;
-    this.#cardsPresenter.forEach((presenter) => {
-      console.log(presenter);
-      return presenter.removeLoading();});
+
     this.#renderCards(cards.slice(0, Math.min(cardCount, this.#renderedCardCount)));
 
     if (cardCount > this.#renderedCardCount) {

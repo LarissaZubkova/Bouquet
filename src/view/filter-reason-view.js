@@ -1,11 +1,9 @@
 import AbstractView from '../framework/view/abstract-view.js';
-
-function getFilterText(type) {
-  return type ? type[0].toUpperCase() + type.slice(1) : '';
-}
+import {getFilterText} from '../utils/filter.js';
 
 function createFilterItemTemplate(filter, currentFilterType, index) {
   const {type, name} = filter;
+
   return `<div class="filter-field-text filter-reason__form-field--for-${name} filter-reason__form-field">
             <input class="filter-field-text__input filter-reason__form-field--for-${name} filter-reason__form-field" type="radio" id="filter-reason-field-id-${index}" name="reason" value="for-${name}" ${type === currentFilterType ? 'checked' : ''}>
             <label class="filter-field-text__label" for="filter-reason-field-id-${index}"><span class="filter-field-text__text" data-filter-type="${type}">${getFilterText(type)}</span></label>
@@ -14,6 +12,7 @@ function createFilterItemTemplate(filter, currentFilterType, index) {
 
 function createFilterReasonTemplate(filterItems, currentFilterType) {
   const filterItemsTemplate = filterItems.map((filter, index) => createFilterItemTemplate(filter, currentFilterType, index)).join('');
+
   return `<section class="filter-reason">
       <div class="container">
         <h2 class="title title--h3 filter-reason__title">Выберите повод для букета</h2>

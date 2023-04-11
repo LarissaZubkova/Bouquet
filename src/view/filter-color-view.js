@@ -2,6 +2,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 function createFilterItemTemplate(filter, currentFilterType, index) {
   const {type, name} = filter;
+
   return `<div class="filter-field-img filter-color__form-field">
        <input class="filter-field-img__input filter-color__form-field" type="checkbox" id="filter-colors-field-id-${index}" name="colors" value="color-${name}" ${currentFilterType.includes(name) ? 'checked' : ''} data-filter-color="color-${name}">
        <label class="filter-field-img__label" for="filter-colors-field-id-${index}">
@@ -16,6 +17,7 @@ function createFilterItemTemplate(filter, currentFilterType, index) {
 
 function createFilterColorTemplate(filterItems, currentFilterType) {
   const filterItemsTemplate = filterItems.map((filter, index) => createFilterItemTemplate(filter, currentFilterType, index)).join('');
+
   return `<section class="filter-color">
   <div class="container">
     <h2 class="title title--h3 filter-color__title">Выберите основной цвет для букета</h2>

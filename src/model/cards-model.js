@@ -22,7 +22,6 @@ export default class CardsModel extends Observable {
     } catch(err) {
       this.#product = {};
     }
-
     return this.#product;
   }
 
@@ -65,7 +64,6 @@ export default class CardsModel extends Observable {
     } catch(err) {
       this.#cart = {};
     }
-
     return this.#cart;
   }
 }

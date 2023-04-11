@@ -1,20 +1,20 @@
 import ApiService from '../framework/api-service.js';
-import {Method, ActionType} from '../const.js';
+import {Method, ActionType, Url} from '../const.js';
 
 export default class CardsApiService extends ApiService {
   get cards() {
-    return this._load({url: 'products'})
+    return this._load({url: `${Url.PRODUCTS}`})
       .then(ApiService.parseResponse);
   }
 
   async getProduct(productId) {
-    return this._load({url: `products/${productId}`})
+    return this._load({url: `${Url.PRODUCTS}/${productId}`})
       .then(ApiService.parseResponse);
   }
 
   async addCard(card) {
     const response = await this._load({
-      url: `products/${card.id}`,
+      url: `${Url.PRODUCTS}/${card.id}`,
       method: Method.PUT,
       body: JSON.stringify(card),
       headers: new Headers({'Content-Type': 'application/json'}),
@@ -29,18 +29,19 @@ export default class CardsApiService extends ApiService {
     const cart = await this.cart;
     const count = cart.products[data.id];
     const productId = Object.keys(cart.products);
+
     switch(type) {
       case ActionType.DELETE_ALL:
         for (let i = 0; i <= count; i++) {
           response = await this._load({
-            url: `products/${data.id}`,
+            url: `${Url.PRODUCTS}/${data.id}`,
             method: Method.DELETE,
           });
         }
         break;
       case ActionType.DELETE:
         response = await this._load({
-          url: `products/${data.id}`,
+          url: `${Url.PRODUCTS}/${data.id}`,
           method: Method.DELETE,
         });
         break;
@@ -48,7 +49,7 @@ export default class CardsApiService extends ApiService {
         productId.forEach( (id) => {
           for (let i = 0; i < cart.products[id]; i++) {
             response = this._load({
-              url: `products/${id}`,
+              url: `${Url.PRODUCTS}/${id}`,
               method: Method.DELETE,
             });
           }
@@ -58,7 +59,7 @@ export default class CardsApiService extends ApiService {
   }
 
   get cart() {
-    return this._load({url: 'cart'})
+    return this._load({url: Url.CART})
       .then(ApiService.parseResponse);
   }
 }

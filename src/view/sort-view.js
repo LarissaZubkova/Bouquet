@@ -1,5 +1,5 @@
-import {SortType} from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
+import {SortType} from '../const.js';
 
 function createSortTemplate(currentSortType) {
   return `<div class="catalogue__header" id="catalogue">

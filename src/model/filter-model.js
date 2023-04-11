@@ -27,11 +27,13 @@ export default class FilterModel extends Observable {
     if (this.#filterColor.includes(ColorFilter.ALL.COLOR_NAME)) {
       this.#filterColor = this.#filterColor.filter((color) => color !== ColorFilter.ALL.COLOR_NAME);
     }
+
     if (this.#filterColor.includes(filterColor)) {
       this.#filterColor = this.#filterColor.filter((color) => color !== filterColor);
     } else {
       this.#filterColor.push(filterColor);
     }
+
     if (this.#filterColor.length === 0) {
       this.#filterColor = [ColorFilter.ALL.COLOR_NAME];
     }

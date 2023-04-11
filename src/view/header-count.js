@@ -3,6 +3,7 @@ import {getPrice} from '../utils/card.js';
 
 function createHeaderCountTemplate(cart) {
   const {productCount, sum} = cart;
+
   return `<div class="header__container">
   <div class="header-count">
     <button class="header-count__btn" type="button">

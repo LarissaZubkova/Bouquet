@@ -1,4 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import {SLIDER_IMAGE_NUMBER, ImagePosition, TRANSITION_DURATION, SLIDER_STEP} from '../const.js';
 
 function getAuthor(index, authorPhoto) {
   return (index === 0) ? `Автор  фотографии: ${authorPhoto}` : '';
@@ -39,12 +40,12 @@ export default class CardModalView extends AbstractView {
   #product = null;
   #btnLeft = null;
   #btnRight = null;
-  #imageNamber = 1;
-  #positin = 0;
+  #imageNamber = SLIDER_IMAGE_NUMBER;
+  #positin = ImagePosition.START;
   #sliderElement = null;
   #handleModalClose = null;
 
-  constructor({product, onModalClose}){
+  constructor({product, onModalClose}) {
     super();
     this.#product = product;
     this.#handleModalClose = onModalClose;
@@ -57,6 +58,7 @@ export default class CardModalView extends AbstractView {
     if (this.#btnLeft) {
       this.#btnLeft.addEventListener('click', this.#btnLeftClickHandler);
     }
+
     if (this.#btnRight) {
       this.#btnRight.addEventListener('click', this.#btnRightClickHandler);
     }
@@ -78,27 +80,29 @@ export default class CardModalView extends AbstractView {
 
   #btnLeftClickHandler = (evt) => {
     evt.preventDefault();
-    this.#imageNamber -= 1;
+    this.#imageNamber -= SLIDER_STEP;
 
-    if (this.#imageNamber >= 1) {
+    if (this.#imageNamber >= SLIDER_STEP) {
       this.#btnRight.removeAttribute('disabled');
-      this.#sliderElement.style.transform = `translate3d(${this.#positin += 700}px, 0px, 0px)`;
-      this.#sliderElement.style.transitionDuration = '700ms';
+      this.#sliderElement.style.transform = `translate3d(${this.#positin += ImagePosition.STEP}px, 0px, 0px)`;
+      this.#sliderElement.style.transitionDuration = TRANSITION_DURATION;
     }
-    if (this.#imageNamber === 1) {
+
+    if (this.#imageNamber === SLIDER_STEP) {
       this.#btnLeft.setAttribute('disabled', 'disabled');
     }
   };
 
   #btnRightClickHandler = (evt) => {
     evt.preventDefault();
-    this.#imageNamber += 1;
+    this.#imageNamber += SLIDER_STEP;
 
     if (this.#imageNamber <= this.#product.images.length) {
       this.#btnLeft.removeAttribute('disabled');
-      this.#sliderElement.style.transform = `translate3d(${this.#positin -= 700}px, 0px, 0px)`;
-      this.#sliderElement.style.transitionDuration = '700ms';
+      this.#sliderElement.style.transform = `translate3d(${this.#positin -= ImagePosition.STEP}px, 0px, 0px)`;
+      this.#sliderElement.style.transitionDuration = TRANSITION_DURATION;
     }
+
     if (this.#imageNamber === this.#product.images.length) {
       this.#btnRight.setAttribute('disabled', 'disabled');
     }

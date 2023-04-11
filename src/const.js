@@ -119,6 +119,21 @@ const TimeLimit = {
   UPPER_LIMIT: 1000,
 };
 
+const SLIDER_IMAGE_NUMBER = 1;
+
+const ImagePosition = {
+  START: 0,
+  STEP: 1100,
+};
+
+const TRANSITION_DURATION = '700ms';
+const SLIDER_STEP = 1;
+
+const Url = {
+  PRODUCTS: 'products',
+  CART: 'cart',
+};
+
 export {
   AUTHORIZATION,
   END_POINT,
@@ -135,4 +150,9 @@ export {
   ScrollTop,
   TimeLimit,
   ActionType,
+  SLIDER_IMAGE_NUMBER,
+  ImagePosition,
+  TRANSITION_DURATION,
+  SLIDER_STEP,
+  Url,
 };

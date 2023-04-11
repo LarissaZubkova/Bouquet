@@ -44,11 +44,13 @@ function createCardTemplate(cards, cart) {
 </li>`;
   }).join('');
 }
+
 function createPopupTemplate(cards, cart) {
   const addedCardsId = Object.keys(cart.products);
   const addedCards = cards.filter((card) => addedCardsId.includes(card.id));
+
   return `<section class="popup-deferred" style="display:block;">
-  <div class="popup-deferred__wrapper">
+   <div class="popup-deferred__wrapper">
     <section class="hero hero--popup">
       <div class="hero__wrapper">
         <div class="hero__background">
@@ -100,7 +102,7 @@ function createPopupTemplate(cards, cart) {
       </div>
     </div>
   </div>
-</section>`;
+ </section>`;
 }
 
 export default class PopupView extends AbstractView {
@@ -151,16 +153,21 @@ export default class PopupView extends AbstractView {
   #btnDeleteClickHandler = (evt) => {
     evt.preventDefault();
     let cardId;
+
     if (evt.target.closest('.popup-deferred__item')) {
       cardId = evt.target.closest('.popup-deferred__item').id;
     }
+
     const deletedCard = this.#cards.find((card) => card.id === cardId);
+
     if (evt.target.closest('.btn-calculate')) {
       this.#handleBtnCalculateClick(deletedCard, UserAction.DELETE_CARD, ActionType.DELETE);
     }
+
     if (evt.target.closest('.btn-close')) {
       this.#handleBtnCalculateClick(deletedCard, UserAction.DELETE_CARD, ActionType.DELETE_ALL);
     }
+
     if (evt.target.closest('.popup-deferred__btn-clean')) {
       this.#handleBtnCalculateClick(this.#cart, UserAction.DELETE_CARD, ActionType.CLEAN);
     }

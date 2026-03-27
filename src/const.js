@@ -1,5 +1,5 @@
 const AUTHORIZATION = 'Basic hS2sfSff4wcj356hg';
-const END_POINT = 'https://grading.objects.pages.academy/flowers-shop';
+const END_POINT = 'https://grading.objects.htmlacademy.pro/flowers-shop';
 
 const CARD_COUNT_PER_STEP = 6;
 

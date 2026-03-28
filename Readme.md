@@ -1,4 +1,4 @@
-# Проект «Bouquet»
+# «Bouquet»
 
 <img width="100" alt="logo" src="/markup/img/sprite/icon-logo.svg"></img>
 
